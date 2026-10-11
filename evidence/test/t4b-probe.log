@@ -1,0 +1,70 @@
+seed: a=201 b=201
+seed notes newest-first: ["Probe B","Probe B","Probe A","Probe A"]
+
+== D1: failed detail load (network abort), banner + Retry ==
+  boot detail shown: "SAT 3 OCT 2026 · 08:00
+
+Probe B
+Edit
+Del" (selected row exists: 1)
+  after aborted click: GETs=["GET 3"] banner.hidden=false retry=1 detail=0
+  banner text: "That note could not be opened. The Coffee Notes server is not answering. Check that it is still running, then retry.Retry"
+  pane text: "Nothing selected Choose a note from the history, or start a new one."
+PASS  D1 GET was re-issued on row click  — ["GET 3"]
+PASS  D1 banner is visible  — hidden=false
+PASS  D1 banner has plain-language message  — That note could not be opened. The Coffee Notes server is not answering. Check that it is still running, then retry.Retry
+PASS  D1 a Retry control is present  — retry=1
+PASS  D1 no stale detail presented as current  — detail=0 pane="Nothing selected Choose a note from the history, or start a new one."
+  after Retry: banner.hidden=true detail=1 shown="FRI 2 OCT 2026 · 08:00 Probe A Edit Delete BREW DATE AND TI"
+PASS  D1 Retry restores the selected note detail  — shown="FRI 2 OCT 2026 · 08:00 Probe A Edit Delete BREW DATE AND TI"
+PASS  D1 banner cleared after a successful Retry  — hidden=true
+
+== D2: delete confirmation focus trap ==
+  on open: active=BUTTON# "Keep note" openDialogs=1
+PASS  D2 first focus lands inside the dialog  — active="Keep note"
+  Tab x12 containment: tttttttttttt
+PASS  D2 Tab x12 stays inside the dialog  — tttttttttttt
+  Shift+Tab x4 containment: tttt
+PASS  D2 Shift+Tab x4 stays inside the dialog  — tttt
+  after Esc: openDialogs=0 active="Delete" cls="btn btn--danger btn--small"
+PASS  D2 Esc closes the confirmation  — open=0
+PASS  D2 focus returns to the Delete button  — active="Delete"
+FAIL  D2 Esc did not delete the note  — rows=2
+
+== D3: settings dialog focus trap (incl. re-renders) ==
+  on open: active=BUTTON# "Make default for Probe G"
+  Tab x12: tttttttttttt
+PASS  D3 Tab x12 stays inside settings  — tttttttttttt
+  Shift+Tab x4: tttt
+PASS  D3 Shift+Tab x4 stays inside settings  — tttt
+  after add re-render Tab x12: tttttttttttt
+PASS  D3 Tab x12 contained after add re-render  — tttttttttttt
+  after rename re-render Tab x12: tttttttttttt
+PASS  D3 Tab x12 contained after rename re-render  — tttttttttttt
+  after make-default re-render Tab x12: tttttttttttt
+PASS  D3 Tab x12 contained after make-default re-render  — tttttttttttt
+  after Esc: openDialogs=0 active=#settings-button "Settings"
+PASS  D3 Esc closes settings  — open=0
+PASS  D3 focus returns to the Settings button  — active=#settings-button
+
+== E5: mobile drawer accessibility (390x844) ==
+  closed: backdropHidden=true backdrop present=1
+PASS  E5 backdrop element exists  — count=1
+  open: {"drawerClass":"sidebar sidebar--drawer","backdropHidden":false,"role":"dialog","ariaModal":"true","paneAriaHidden":"true","paneInert":true,"bodyClass":"drawer-open","bodyOverflow":"hidden","focusInDrawer":true,"activeId":"search-input"}
+PASS  E5 drawer opens  — sidebar sidebar--drawer
+PASS  E5 backdrop becomes visible  — hidden=false
+PASS  E5 focus moves into the drawer  — active=#search-input
+PASS  E5 background is aria-hidden  — aria-hidden=true inert=true
+PASS  E5 panel is aria-modal dialog  — role=dialog aria-modal=true
+PASS  E5 body scroll locked  — class="drawer-open" overflow=hidden
+  Tab x8 inside drawer: tttttttt
+PASS  E5 Tab stays inside the open drawer  — tttttttt
+  after Esc: {"drawerClass":"sidebar","backdropHidden":true,"role":null,"ariaModal":null,"paneAriaHidden":null,"paneInert":false,"bodyClass":"","bodyOverflow":"visible","focusInDrawer":false,"activeId":"notes-button"}
+PASS  E5 Esc closes the drawer  — sidebar
+PASS  E5 focus returns to the notes button  — active=#notes-button
+PASS  E5 background restored after close  — aria-hidden=null inert=false
+PASS  E5 body scroll restored after close  — overflow=visible
+  after backdrop click: {"drawerClass":"sidebar","backdropHidden":true,"role":null,"ariaModal":null,"paneAriaHidden":null,"paneInert":false,"bodyClass":"","bodyOverflow":"visible","focusInDrawer":false,"activeId":"notes-button"}
+PASS  E5 backdrop click closes the drawer  — sidebar
+
+SUMMARY probe: 1 failing assertion(s)
