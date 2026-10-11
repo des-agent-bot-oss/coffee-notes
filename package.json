@@ -1,0 +1,18 @@
+{
+  "name": "coffee-notes",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Single-user, locally hosted coffee brewing and tasting journal.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "COFFEE_NOTES_PORT=4317 node --watch server/index.js",
+    "test": "node --test",
+    "seed": "node server/seed.js --demo",
+    "check": "node scripts/check.js"
+  }
+}

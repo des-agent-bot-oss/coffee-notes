@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Coffee Notes</title>
+    <link rel="stylesheet" href="./fonts/dm-sans.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      /* Consumes the design tokens defined in styles.css (fresh in T1, so the
+         page still renders sensibly if that file is missing). */
+      header {
+        border-bottom: 1px solid var(--line, #e4d8c6);
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.75rem;
+        color: var(--muted, #8a7461);
+      }
+      .status {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: var(--muted, #8a7461);
+      }
+      .status[data-state='ok'] {
+        color: var(--ok, #3f6b4a);
+      }
+      .status[data-state='error'] {
+        color: var(--danger, #9c3b2e);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">Brewing and tasting journal</p>
+        <h1>Coffee Notes</h1>
+      </header>
+
+      <section class="card">
+        <h2>Backend is live</h2>
+        <p>
+          The API, database and migrations are running. The journal UI — history sidebar, note
+          detail/editor, grinder settings — is built in the next task.
+        </p>
+        <p class="muted">
+          Try <a href="./api/health">GET /api/health</a> or <a href="./api/notes">GET /api/notes</a>.
+        </p>
+        <p class="status" data-health>Checking the API…</p>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

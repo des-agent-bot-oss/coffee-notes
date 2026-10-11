@@ -1,0 +1,67 @@
+/*
+ * Coffee Notes — design tokens and placeholder shell styling.
+ * The real UI (sidebar, detail/editor pane, settings dialog) lands in task T2;
+ * this file carries the design system foundation from docs/SPEC.md §5.
+ */
+
+:root {
+  --cream: #f7f0e6;
+  --surface: #fffbf5;
+  --espresso: #3c2415;
+  --brown: #6b4a30;
+  --tan: #c9a87c;
+  --tan-soft: #e6d6bd;
+  --line: #e4d8c6;
+  --muted: #8a7461;
+  --danger: #9c3b2e;
+  --ok: #3f6b4a;
+
+  --radius-card: 14px;
+  --radius-control: 10px;
+  --shadow: 0 1px 2px rgba(60, 36, 21, 0.06), 0 8px 24px rgba(60, 36, 21, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--cream);
+  color: var(--espresso);
+  font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+h1,
+h2 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+main {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 3rem 1.25rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+code {
+  background: var(--tan-soft);
+  border-radius: var(--radius-control);
+  padding: 0.1rem 0.35rem;
+  font-size: 0.9em;
+}
