@@ -1,0 +1,6 @@
+before restart: {"notes":[{"id":1,"brewed_at":"2026-10-11T07:35","grinder_name":"Comandante C40 MK4","bean_name":"Ethiopia Chelbesa","grind_size":null,"is_demo":false}]}
+after  restart: {"notes":[{"id":1,"brewed_at":"2026-10-11T07:35","grinder_name":"Comandante C40 MK4","bean_name":"Ethiopia Chelbesa","grind_size":null,"is_demo":false}]}
+grinders after restart: {"grinders":[{"id":1,"name":"Comandante C40 MK4","is_default":true,"note_count":1},{"id":2,"name":"Timemore C2","is_default":false,"note_count":0}],"default_id":1}
+detail after restart: {"note":{"id":1,"brewed_at":"2026-10-11T07:35","grinder_id":1,"grinder_name":"Comandante C40 MK4","grind_size":null,"dose_g":18,"water_g":288,"bean_name":"Ethiopia Chelbesa","bean_origin":"","roast_level":null,"tasting_notes":"jasmine","is_demo":false,"created_at":"2026-10-11T20:11:52.080Z","updated_at":"2026-10-11T20:11:52.080Z","ratio_display":"1:16"}}
+PERSISTENCE: PASS
+db=/home/hermes/.hermes/cache/scratch/persist-59805.db port=4353 rc=0

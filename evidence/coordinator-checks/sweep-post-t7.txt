@@ -1,0 +1,41 @@
+PASS  sidebar shows the seeded notes — 3 rows
+PASS  newest note is first with date + grinder + bean — Sun 11 Oct 2026 · 07:35 1Zpresso JX-Pro · Kenya Gichathaini Grind 3.5
+PASS  selected row exposes aria-current — {"aria":"true","cls":"note-row"}
+PASS  detail shows ratio 1:16.0 — SUN 11 OCT 2026 · 07:35 Kenya Gichathaini Edit Delete BREW DATE AND TIME Sun 11 Oct 2026 · 07:35 GRINDER 1Zpresso JX-Pro
+PASS  brewed time displays unchanged (07:35) — SUN 11 OCT 2026 · 07:35 Kenya Gichathaini Edit Delete BREW DATE AND TIME Sun 11 Oct 2026 · 07:35 GRINDER 1Zpresso JX-Pro
+PASS  settings lists all presets — ["1Zpresso JX-Pro","Baratza Encore","Comandante C40 MK4"]
+PASS  duplicate name shows an inline error — That name is already in use.
+PASS  preset list survives a duplicate-name error — ["1Zpresso JX-Pro","Baratza Encore","Comandante C40 MK4"]
+PASS  blank name shows an inline error — Enter a grinder name.
+PASS  preset list survives a blank-name error — ["1Zpresso JX-Pro","Baratza Encore","Comandante C40 MK4"]
+PASS  a non-default preset offers Make default — default=Comandante C40 MK4, target=Baratza Encore
+PASS  make default moves the Default badge — Baratza Encore DEFAULT 1 note Rename Baratza Encore Remove Baratza Encore
+PASS  Ctrl/Cmd+N opens the editor with the local date/time — 2026-10-12T04:11 vs now 2026-10-12T04:11
+PASS  new note preselects the default grinder — default_id=2, select=id:2
+PASS  saved note shows its detail with ratio 1:17 — SUN 11 OCT 2026 · 09:20 Brazil Sitio Canaa Edit Delete BREW DATE AND TIME Sun 11 Oct 2026 · 09:20 GRINDER Baratza Encore GRIND SIZE 18 DOSE 
+PASS  save created exactly one row — count=4
+PASS  cancelling a dirty edit reverts to the stored note — SUN 11 OCT 2026 · 09:20 Brazil Sitio Canaa Edit Delete BREW DATE AND TIME Sun 11 Oct 2026 · 09:20 GRINDER Baratza Encore
+PASS  cancelling a new note creates no row — count=4
+PASS  missing brew date shows a field error — Brew date and time is required.
+PASS  out-of-range grind size shows a field error — Enter a number greater than 0 and at most 100.
+PASS  API rejects an impossible date with a field error — status=400 fields={"brewed_at":"That date and time does not exist."}
+PASS  API failure shows a banner with Retry — Your notes could not be loaded. The Coffee Notes server is not answering. Check  | retry buttons=1
+PASS  Retry recovers the list — rows=8
+PASS  sample notes are labelled — chips=5
+PASS  sample action flips to remove once loaded
+PASS  user notes survive the sample clear — count=4
+PASS  delete confirmation names the note and offers Delete note — Delete this note? The note from Sun 11 Oct 2026 · 09:20 brewed with Baratza Encore will be removed for good. This cannot be undone. Keep not
+PASS  Esc cancels the delete — 4 vs 4
+PASS  confirmed delete removes exactly one note — 3 vs 3
+PASS  settings persist across a page reload — ["1Zpresso JX-Pro","Baratza Encore","Comandante C40 MK4"]
+PASS  default grinder persists — Baratza Encore
+PASS  mobile shows the Notes drawer button
+PASS  drawer opens with a visible backdrop — {"sidebarVisible":true,"backdrop":true,"ariaModal":"true"}
+PASS  Esc closes the mobile drawer — true
+PASS  no horizontal overflow at 360px — {"sw":360,"iw":360}
+PASS  no horizontal overflow at 390px — {"sw":390,"iw":390}
+
+page errors: 0 []
+
+SUMMARY: 36/36 passed
+exit=0

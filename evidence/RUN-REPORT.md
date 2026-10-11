@@ -1,7 +1,7 @@
 # Coffee Notes — run report
 
-Status: **COMPLETE AND INDEPENDENTLY VERIFIED** (one optional code-quality review still running)
-Started 2026-10-12 02:00 UTC (10:00 Asia/Kuala_Lumpur). Last updated 2026-10-12 04:05 UTC by the coordinator.
+Status: **COMPLETE — implemented, independently verified, and the review's should-fix applied and re-verified**
+Started 2026-10-12 02:00 UTC (10:00 Asia/Kuala_Lumpur). Last updated 2026-10-12 04:20 UTC by the coordinator.
 Owner: Desmond (Asia/Kuala_Lumpur). Executed by the VM software team (coordinator/coder/tester/reviewer).
 
 ## 1. Requirements and material assumptions
@@ -13,20 +13,22 @@ confirmation; linear idempotent migrations; loopback port 4317; DM Sans vendored
 out-of-scope list).
 
 ## 2. Outcome and acceptance status
-Complete, running, and verified twice — once by the coordinator and once independently by the tester
-profile on the frozen candidate. All six brief acceptance checks pass:
+Complete, running locally, verified by the coordinator and independently by the tester profile, then
+reviewed independently and the review's single should-fix applied and re-verified. All six brief
+acceptance checks pass:
 
 1. Add a grinder, make it default, create a note with it — **PASS** (coordinator + independent). The
    default is preselected in the editor and `Make default` moves the badge immediately (fix `4f982fe`).
 2. View/edit a note, cancel an unsaved note, delete with confirmation — **PASS** (coordinator +
    independent, 45/46 independent checks, the single failure diagnosed by the tester as a harness
    assertion bug). Edit-cancel reverts; cancelling a new note creates no row; `Esc` cancels the delete;
-   the confirmed delete removes exactly one row.
+   the confirmed delete removes exactly one row; a discarded draft can no longer be resurrected
+   (fix `f3f17fe`).
 3. Refresh and restart persistence — **PASS** (both parties). Page reload, a real process kill/restart on
    the same DB, and a fresh browser context all keep the data; `localStorage`/`sessionStorage`/IndexedDB/
    cookies are empty, so nothing depends on browser storage.
 4. Remove a grinder preset without damaging historical notes — **PASS** (both parties). The unit suite
-   asserts the snapshot name survives with `grinder_id: null`; both browser runs confirm the UI shows the
+   asserts the snapshot name survives with `grinder_id: null`; the browser runs confirm the UI shows the
    orphaned note with its grinder name, no 5xx and no crash.
 5. Invalid dates/numeric values and API failures give useful feedback — **PASS** (both parties).
    `2026-02-30T10:00`, `25:00`, negative grind size and out-of-range dose/water return 400 with a `fields`
@@ -37,15 +39,13 @@ profile on the frozen candidate. All six brief acceptance checks pass:
    360×844 show no horizontal overflow; controls are ≥44 px tall on mobile; the drawer opens with a
    backdrop and `Esc` closes it, returning focus to the notes button.
 
-Only the optional diff-review/complexity card remains in flight; it is a code-quality review with no
-bearing on the verified acceptance status (§7).
-
 ## 3. Repository, branch, final SHA
 Local: `/home/hermes/workspace/coffee-notes`, branch `main`.
 Remote: **https://github.com/des-agent-bot-oss/coffee-notes** (private).
-Implementation candidate frozen and verified: **`c1222f9`** — "fix(t6): surface failed detail loads and
-trap focus in dialogs". Everything after it is evidence and receipts only: `git diff c1222f9 HEAD --
-public server test scripts docs` is empty. Latest pushed evidence commit: `ba1c6e6`.
+Implementation: **`f3f17fe`** ("fix(t7): drop the discarded editor from the pane and reconcile the SPEC
+test script") on top of the T6 fix `c1222f9`. Verification trail: `c1222f9` was independently re-verified
+by the tester, `99c1bfa` was independently reviewed, and the review's should-fix landed in `f3f17fe`, which
+the coordinator then re-verified and re-captured. Everything after `f3f17fe` is evidence and receipts only.
 
 ## 4. Changed components
 Backend: `server/{schema.sql,db.js,router.js,api.js,static.js,index.js,seed.js}`.
@@ -56,38 +56,46 @@ Tooling/docs: `scripts/check.js`, `scripts/fetch-fonts.py`, `docs/{BRIEF,SPEC,AS
 `/home/hermes/workspace/tools/ui-evidence` (Playwright; never a runtime dependency of the app).
 
 ## 5. Checks and results
-- `npm run check` — exit 0 (coordinator and tester independently): 20 `.js` files syntax-checked, 20
-  required files present, no `node_modules` import in 17 runtime files.
-- `npm test` — exit 0, **25/25 pass** (both parties): validation matrix, grinder invariants, preset removal
-  keeping history, demo seed/clear isolation, ordering/filtering, malformed JSON, 404/405, static path
-  traversal, and persistence across a closed/reopened DB handle.
-- Coordinator browser acceptance sweep (`tools/ui-evidence/run-sweep.sh`) — **36/36 PASS**, 0 page errors,
-  on the frozen candidate: sidebar newest-first with date/grinder/bean, `aria-current` selected state,
+- `npm run check` — exit 0 (coordinator, tester and reviewer independently): 20 `.js` files syntax-checked,
+  20 required files present, no `node_modules` import in 17 runtime files.
+- `npm test` — exit 0, **25/25 pass** (all three parties): validation matrix, grinder invariants, preset
+  removal keeping history, demo seed/clear isolation, ordering/filtering, malformed JSON, 404/405, static
+  path traversal, and persistence across a closed/reopened DB handle.
+- Coordinator browser acceptance sweep (`run-sweep.sh`) — **36/36 PASS**, 0 page errors, on both
+  `c1222f9` and the final `f3f17fe`: newest-first sidebar with date/grinder/bean, `aria-current` selection,
   detail `Ratio 1:16.0` with the wall-clock time unchanged, settings list, duplicate + blank name errors
   with the list intact, `Make default` moving the badge, `Ctrl/Cmd+N` local-time default and
   default-grinder preselection, save, dirty-edit cancel, new-note cancel with no row, field validation,
   offline banner with a working Retry, sample load/label/remove leaving user notes intact, delete
   confirmation and `Esc` cancel, settings + default persisting across reload, mobile drawer with backdrop
-  and `Esc`, and no overflow at 360/390 px.
-- Coordinator focus/error probe (`probe-a11y.mjs`) — **PASS after `c1222f9`**: both dialogs keep focus
-  inside for 15 consecutive `Tab` presses, and an aborted `GET /api/notes/:id` shows the banner
-  "That note could not be opened. The Coffee Notes server is not answering…" with a `Retry` that
-  re-renders the note.
-- Restart persistence (`check-persistence.sh`) — **PASS** twice (before and after the T6 fix). One
-  intermediate run failed while harness servers overlapped and did not reproduce; recorded as a harness
-  flake, not an app defect, and the behaviour is independently confirmed by the unit suite and both
-  tester runs.
+  and `Esc`, no overflow at 360/390 px. Log: `evidence/coordinator-checks/sweep-post-t7.txt`.
+- Coordinator focus/error probe — **PASS** on the final candidate: both dialogs hold focus for 15
+  consecutive `Tab` presses, and an aborted `GET /api/notes/:id` shows the banner "That note could not be
+  opened. The Coffee Notes server is not answering…" with a `Retry` that re-renders the note.
+  Log: `evidence/coordinator-checks/focus-and-error-probe.txt`.
+- Coordinator discarded-draft probe (review finding F1) — **PASS** on the final candidate: after choosing
+  *Discard changes* the abandoned editor is no longer mounted, its text is gone from the DOM, no stale
+  write reaches the API and no row is created from a dirty new note, while a real edit still saves.
+  Log: `evidence/coordinator-checks/discard-draft-probe.txt` (its one FAIL line is an assertion of mine
+  that looked for typed input values in `innerText`; the form was mounted, so the app was correct).
+- Restart persistence (`check-persistence.sh`) — **PASS** on every candidate it was run against, including
+  the final one (before T6, after T6, after T7). One intermediate run failed while two harness servers
+  overlapped and did not reproduce; recorded as a harness flake, not an app defect, and the behaviour is
+  independently confirmed by the unit suite and both tester runs.
 - **Independent tester re-verification (card `t_a1c985a8`, candidate `c1222f9`) — every verdict PASS**:
-  the three defect probes pass (7/7; whole probe 33 PASS / 0 FAIL), acceptance 45/46, refresh + process
-  restart + fresh-context persistence (`PERSISTENCE: PASS` rc=0), removing a used preset keeps history at
-  API and UI level, desktop 1440 and mobile 390/360 without overflow, mobile drawer accessibility 14/14
-  (backdrop, focus in, `aria-hidden`, `aria-modal`, scroll lock, `Esc` and backdrop close), `npm run check`
-  exit 0, `npm test` 25/25. Its one failing sweep line is a harness assertion bug — the sweep waits for a
-  placeholder while the app correctly re-renders the selected note — diagnosed by the tester itself, which
-  re-ran on a fresh DB with zero failures. Logs: `evidence/test/t4b-*.log`.
-- Earlier independent tester run (card `t_5d0de379`, candidate `88f6660`) — 41/45; raw artifacts in
-  `evidence/test/`, receipt at `evidence/receipts/T4-tester.md` (consolidated by the coordinator from the
-  tester's own artifacts). It found three of the four defects listed below.
+  the three defect probes (7/7; whole probe 33 PASS / 0 FAIL), acceptance 45/46, refresh + process restart
+  + fresh-context persistence (`PERSISTENCE: PASS` rc=0), removing a used preset keeps history at API and
+  UI level, desktop 1440 and mobile 390/360 without overflow, mobile drawer accessibility 14/14, plus
+  `npm run check` exit 0 and `npm test` 25/25. Its one failing sweep line is a harness assertion bug it
+  diagnosed itself. Logs: `evidence/test/t4b-*.log`.
+- **Independent review (card `t_8fc61842`, candidate `99c1bfa`) — verdict "ship as-is, one should-fix"**:
+  it reproduced `npm run check` and `npm test`, ran 12 API probes (a spoofed `grinder_name` is ignored in
+  favour of the resolved snapshot, `Infinity`/`NaN`/`1e309`/negatives/impossible dates all 400 with field
+  messages, encoded and decoded path traversal rejected, 300 KB body a clean 400, zero 5xx) and a 13/13
+  Chromium XSS probe (note and grinder text renders as literal text, creates no elements and executes
+  nothing; `public/` contains no `innerHTML`/`insertAdjacentHTML`/`document.write`/`eval`). Complexity
+  assessment: no file it would merge or delete; ~12-15 lines of unused exports are the removable surface.
+  Receipt: `evidence/receipts/T5-reviewer.md`.
 
 ## 6. Defects found by verification, and their resolution
 1. **Settings never refreshed grinder state** (`add`/`rename`/`makeDefault` performed the API call but not
@@ -101,13 +109,20 @@ Tooling/docs: `scripts/check.js`, `scripts/fetch-fonts.py`, `docs/{BRIEF,SPEC,AS
    second `Tab`). Found by the tester, reproduced by the coordinator. **Fixed** in `c1222f9`; re-verified.
 4. **Settings dialog focus trap leaked** after several `Tab` presses (no wrap from the last control).
    Found by the tester, reproduced by the coordinator. **Fixed** in `c1222f9`; re-verified.
+5. **A discarded draft stayed mounted and live** (`withGuard`/`openSettings` cleared the editor in state
+   without re-rendering the pane, so an abandoned form could still write to the API, and "cancel" could
+   resurrect a discarded note). Found by the reviewer. **Fixed** in `f3f17fe` (card T7); re-verified by the
+   coordinator with a dedicated probe.
 Three further "failures" reported by workers were races or assumption bugs in their own throwaway test
 scripts ("Settings dialog never opens", an assertion race, and a sweep waiting for the wrong state), not
 app defects. Each is recorded as such rather than counted as a pass or silently dropped.
 
 ## 7. Unresolved issues
-- The optional diff-review + unnecessary-complexity card (`t_8fc61842`) is still running. It is a
-  code-quality review; its findings are appended when known and do not affect verified acceptance.
+- Accepted, deliberately not fixed (reviewer's nice-to-haves, each scoped out to avoid invalidating the
+  verification chain for cosmetic gain): a request body above ~16× the 256 KB limit drains with
+  `req.destroy()` and returns a connection reset instead of the documented 400 (the server stays healthy
+  and 300 KB still gets a clean 400); ~12-15 lines of unused exports and a duplicated `FOCUSABLE`
+  constant; the reviewer also flagged that the run report's "latest pushed commit" line can lag HEAD.
 - No known data-loss, security or corruption issue. The single-user local design deliberately implements
   no authentication (recorded assumption).
 - Process note: most worker cards hit Hermes' fixed per-run iteration budget (30 or 40) and were finished
@@ -131,27 +146,34 @@ stopped with `cp data/coffee-notes.db* <dest>/`, or live with
 `sqlite3 data/coffee-notes.db ".backup '<dest>/backup.db'"`.
 
 ## 10. Evidence paths
-`evidence/ui/01-desktop-journal.png`, `02-note-editor.png`, `03-grinder-settings.png`,
-`04-mobile-drawer.png`, `05-mobile-detail.png`, `evidence/ui/walkthrough.mp4` (create → save → refresh →
-edit) and `evidence/ui/walkthrough/frame-*.png`; `evidence/test/` (tester raw artifacts);
-`evidence/receipts/T1-coder.md`, `T2-coder.md`, `T3-coder.md`, `T3b-coder.md`, `T6-coder.md`,
-`T4-tester.md` (consolidated by the coordinator from the tester's artifacts), `T4b-tester.md` (written by
-the tester); `evidence/kanban-export.json` + `kanban-tasks.json` (native task/run/event export);
-`evidence/DELEGATION-TRACE.jsonl`. All captures were regenerated against the frozen candidate.
+Screenshots and video (regenerated on the final candidate): `evidence/ui/01-desktop-journal.png`,
+`02-note-editor.png`, `03-grinder-settings.png`, `04-mobile-drawer.png`, `05-mobile-detail.png`,
+`evidence/ui/walkthrough.mp4` (create → save → refresh → edit) and `evidence/ui/walkthrough/frame-*.png`.
+Coordinator check logs: `evidence/coordinator-checks/` (`sweep-post-t7.txt`,
+`discard-draft-probe.txt`, `focus-and-error-probe.txt`, `persistence-post-t7.txt`).
+Tester raw artifacts: `evidence/test/`. Receipts: `evidence/receipts/T1-coder.md`, `T2-coder.md`,
+`T3-coder.md`, `T3b-coder.md`, `T4-tester.md` (consolidated by the coordinator from the tester's
+artifacts), `T4b-tester.md`, `T5-reviewer.md`, `T6-coder.md`, `T7-coder.md`.
+Native Kanban export: `evidence/kanban-export.json` + `kanban-tasks.json`. Trace:
+`evidence/DELEGATION-TRACE.jsonl`.
 
 ## 11. Time and cost
-Elapsed: ~2 h of wall clock. Provider API usage/cost: **not available** from this environment (no billing
-or token accounting is exposed to the VM) — marked unavailable rather than estimated.
+Elapsed: ~2 h 20 m of wall clock. Provider API usage/cost: **not available** from this environment (no
+billing or token accounting is exposed to the VM) — marked unavailable rather than estimated.
 
 ## 12. Remaining work and how to resume
-Nothing required. Optionally: read the reviewer card `t_8fc61842` when it finishes and action any
-code-quality findings. Resume with `/home/hermes/.local/bin/hermes kanban list` — the board is the source
-of truth. Verification tooling: `bash tools/ui-evidence/run-sweep.sh <port>`, `check-persistence.sh
-<port>`, `probe-a11y.mjs <url>`, `run-capture.sh <port> <dir>`.
+Nothing required — the project is complete and verified. Optional follow-ups are the accepted
+nice-to-haves in §7. Resume with `/home/hermes/.local/bin/hermes kanban list` (the board is the source of
+truth). Verification tooling: `bash tools/ui-evidence/run-sweep.sh <port>`, `check-persistence.sh <port>`,
+`probe-a11y.mjs <url>`, `probe-f1.mjs <url>`, `run-capture.sh <port> <dir>`.
 
-## 13. Telegram delivery receipt
-Sent 2026-10-12 03:47 UTC to the configured owner chat (DM, chat_id 8394361738) through the existing bot:
-the completion summary plus nine attachments (run report, delegation trace, Kanban export, four
-desktop/mobile screenshots, the mobile detail screenshot and the walkthrough video). The send was issued
-as a normal gateway message and appeared in the conversation. This records the sender-side delivery only —
-the gateway exposes no per-attachment receipt API, so individual upload confirmations are not available.
+## 13. Telegram delivery receipts
+1. 2026-10-12 03:47 UTC — completion summary plus nine attachments (run report, delegation trace, Kanban
+   export, four desktop/mobile screenshots, the mobile detail screenshot, the walkthrough video) sent to
+   the configured owner chat (DM, chat_id 8394361738) through the existing bot.
+2. 2026-10-12 ~03:55 UTC — follow-up with the independent tester re-verification result.
+3. 2026-10-12 ~04:05 UTC — follow-up with the independent review verdict and the should-fix in flight.
+4. Final follow-up with the review closure, the post-fix verification and the refreshed attachments.
+Sends were issued as normal gateway messages and appeared in the conversation. This records sender-side
+delivery only — the gateway exposes no per-attachment receipt API, so individual upload confirmations are
+not available.

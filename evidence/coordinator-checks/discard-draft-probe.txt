@@ -1,0 +1,13 @@
+FAIL  dirty editor is mounted before the guard — {"form":1,"staleText":false}
+PASS  opening Settings with a dirty editor asks first — Discard unsaved changes?
+PASS  discarded EDIT draft is no longer mounted in the pane — {"form":0,"staleText":false}
+PASS  discarded EDIT text is gone from the DOM — {"form":0,"staleText":false}
+PASS  no stale write reached the API after discarding the EDIT — ["Ethiopia Chelbesa"]
+PASS  discarded NEW-NOTE draft is no longer mounted in the pane — {"form":0,"staleText":false}
+PASS  discarded NEW-NOTE text is gone from the DOM — {"form":0,"staleText":false}
+PASS  no row was created from the discarded NEW-NOTE draft — count=1
+PASS  a real edit still saves — ["Ethiopia Chelbesa"]
+PASS  the real edit reached the API — REAL EDIT
+page errors: 0 []
+SUMMARY: 9/10 passed
+FAILED: dirty editor is mounted before the guard

@@ -2,19 +2,43 @@
   "t_008fc7e9": {
     "id": "t_008fc7e9",
     "title": "T1 coder: scaffold repo + backend API/DB + tests",
-    "status": "done",
+    "body": "You are the sole implementation writer for the Coffee Notes project. Read `docs/SPEC.md` (binding technical contract), `docs/BRIEF.md` (owner requirements) and `docs/ASSUMPTIONS.md` first. Use the team-contract, team-quality and team-verify skills.\n\nREPOSITORY: /home/hermes/workspace/coffee-notes (workspace_path is already set). Branch `main`, baseline commit `48da0af` (docs + vendored fonts only). Do not rewrite or delete docs/, evidence/ or scripts/fetch-fonts.py. Do not touch anything outside this repository.\n\nDELIVERABLE (T1 = backend only, frontend is T2): a working server + database + API + tests + operational doc, serving a placeholder static page so the app can be started end to end.\n\n1. `package.json` \u2014 name `coffee-notes`, `\"type\":\"module\"`, `\"engines\":{\"node\":\">=22\"}`, NO runtime dependencies, scripts exactly per SPEC \u00a76 (`start`, `dev`, `test`, `seed`, `check`).\n2. `server/schema.sql`, `server/db.js` \u2014 SQLite via `node:sqlite` `DatabaseSync`, `PRAGMA journal_mode=WAL` and `PRAGMA foreign_keys=ON`, linear idempotent migrations recorded in `schema_migrations`, prepared statements, all queries in this module. Data model exactly as SPEC \u00a74 including the partial unique index on the single default grinder and the `grinder_name` snapshot column.\n3. `server/router.js` + `server/index.js` \u2014 `node:http` server bound to `127.0.0.1`, port/config per SPEC \u00a73, small method+path router, JSON body parsing with a size limit (e.g. 256 KB) and clear 400 on malformed JSON, uniform error envelope per SPEC \u00a77, 404 for unknown routes, 405 where a known path is called with a wrong method, static file serving with correct MIME types and no path traversal (reject `..` after decoding). Graceful shutdown on SIGINT/SIGTERM (close server + DB). Startup log line with resolved host/port/db path.\n4. `server/api.js` \u2014 every route in SPEC \u00a77 with the validation rules exactly as written: `brewed_at` format + real calendar validity, numeric ranges, field-level error messages, `grinder_name` snapshot resolution, duplicate/blank grinder handling (409/400), single-default invariant, `DELETE` of a grinder promoting the oldest remaining (or null), `newest first` ordering, `q`/`grinder`/`limit` query handling. `grinder_id` referencing a missing grinder must be a 400 field error, and a deleted grinder must leave the note readable with its snapshot name.\n5. `server/seed.js` \u2014 5 realistic demo notes + 2 demo grinders (only when no grinder exists), all with `is_demo=1`; CLI `node server/seed.js --demo`; `DELETE /api/demo` removes `is_demo=1` rows only.\n6. `test/db.test.js` and `test/api.test.js` \u2014 `node:test`, temp DB file inside the process scratch dir (never the repo `data/`), ephemeral port. Cover: create/read/update/delete note; validation failures (bad `brewed_at` e.g. `2026-02-30T10:00`, `2026-10-11T25:00`, non-numeric/negative grind size, dose/water out of range); blank and duplicate grinder names; setting default clears the previous one; deleting the default promotes another; deleting a grinder keeps its notes with the snapshot name and null `grinder_id`; demo seed then clear leaves user notes intact; `q` filter and ordering newest first; malformed JSON; unknown route; persistence across a closed-and-reopened database handle (simulating process restart).\n7. `scripts/check.js` \u2014 the `npm run check` build check described in SPEC \u00a76. It must pass on your code.\n8. `public/index.html` \u2014 minimal placeholder (project name, the design tokens from SPEC \u00a75, a link to `public/fonts/dm-sans.css`, text stating the UI lands in the next task and the API is live). Keep it tiny; do not build the real UI.\n9. `docs/OPERATIONS.md` \u2014 start/stop, URL, DB path, backup command, Windows SSH tunnel line, note that the app process is separate from Hermes. Reference `docs/SPEC.md` for the API instead of duplicating it; if you document routes, keep a short table only.\n10. `evidence/receipts/T1-coder.md` \u2014 receipt per the team-verify skill: task id, candidate SHA, exact commands run, exit codes, observed behaviour, limitations, and confirmation that `npm test` and `npm run check` pass and the server answered `GET /api/health` plus a real note round-trip through `curl`.\n\nBOUNDS: local-only completion. No GitHub push (the coordinator publishes), no LAN/public binding, no new npm runtime dependency, no frameworks, no TypeScript build step, no Docker, no unrelated files or refactors. Do not modify `docs/SPEC.md`; if the spec is genuinely unworkable, note it in the receipt and in a Kanban comment instead of silently diverging.\n\nVERIFY BEFORE HANDING OFF: `npm run check`, `npm test`, then start the server and run a real curl round-trip (create grinder \u2192 create note \u2192 list \u2192 delete note) against the running process. Then commit with `git -c user.name=DesBots -c user.email=des.agent.bot@gmail.com commit` and report the candidate SHA, changed files and the exact command output summary. A source change after your receipt invalidates it, so commit last.",
     "assignee": "coder",
+    "status": "done",
+    "priority": 0,
+    "created_by": "default",
     "created_at": 1791742059,
     "started_at": 1791742119,
     "completed_at": 1791743165,
     "workspace_kind": "dir",
     "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "branch_name": null,
+    "project_id": null,
+    "claim_lock": null,
+    "claim_expires": null,
+    "tenant": null,
+    "result": "T1 backend verified at 6862eff; npm run check + npm test + live curl round-trip all pass; no source change needed.",
+    "idempotency_key": null,
+    "consecutive_failures": 0,
+    "worker_pid": null,
+    "worker_started_at": "8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|152212",
+    "last_failure_error": null,
+    "max_runtime_seconds": 4200,
+    "last_heartbeat_at": 1791743145,
+    "current_run_id": null,
+    "workflow_template_id": null,
+    "current_step_key": null,
+    "skills": "[\"team-contract\", \"team-quality\", \"team-verify\"]",
+    "model_override": null,
+    "provider_override": null,
+    "reasoning_effort": null,
+    "max_retries": null,
     "goal_mode": 1,
     "goal_max_turns": 14,
-    "max_runtime_seconds": 4200,
-    "result": "T1 backend verified at 6862eff; npm run check + npm test + live curl round-trip all pass; no source change needed.",
-    "last_failure_error": null,
-    "consecutive_failures": 0,
+    "session_id": "20261011_025748_f5a17829",
+    "block_kind": null,
+    "block_recurrences": 0,
+    "completion_contract": "local-only",
     "events": [
       {
         "created_at": 1791742059,
@@ -188,25 +212,48 @@
         "summary": "T1 backend is complete and re-verified at commit 6862eff (implementation 037135e, unchanged). I re-ran npm run check (exit 0), npm test (25/25 pass) and a full live curl round-trip against a running server on 127.0.0.1:4317 with a scratch DB \u2014 health, note/grinder CRUD, validation 400s, demo seed/clear, grinder-delete snapshot preservation, 404/405, static serving, graceful SIGTERM and restart persistence all behaved per docs/SPEC.md. No source change was required, so the existing receipt stays valid; my findings are on the card as a comment and completing this card releases the gated T2 child t_465f2318.",
         "error": null
       }
-    ],
-    "comments": []
+    ]
   },
   "t_465f2318": {
     "id": "t_465f2318",
     "title": "T2 coder: frontend core \u2014 design system, history sidebar, detail and editor",
-    "status": "done",
+    "body": "You are the sole implementation writer for the Coffee Notes frontend, second implementation card. Read `docs/SPEC.md` \u2014 \u00a75 (design tokens), \u00a77 (API) and \u00a78 (frontend behaviour) are binding \u2014 plus `docs/BRIEF.md` and `docs/ASSUMPTIONS.md`. Use the team-contract, team-quality and team-verify skills. This card is gated on the backend card `t_008fc7e9`; start from its candidate commit and read its receipt in `evidence/receipts/`.\n\nSCOPE: the complete core UI. Replace the `public/index.html` placeholder and build `public/styles.css` + ES modules under `public/js/`. Do NOT modify `server/`, `test/`, `docs/BRIEF.md` or `docs/SPEC.md`. If the backend is missing something you genuinely need, note it in a Kanban comment and work around it client-side \u2014 do not silently change the API contract.\n\nDELIVERABLE:\n1. Warm design system in `public/styles.css` using the exact tokens in SPEC \u00a75: cream `#F7F0E6` page, off-white surfaces, espresso/brown/tan accents, rounded cards (14px) and controls (10px), restrained 1px `--line` borders, subtle layered shadows, generous purposeful spacing. Typography via `@font-face` from `public/fonts/dm-sans.css` with the system fallback stack. No CSS framework, no preprocessor, no inline `<style>` blocks beyond nothing \u2014 one stylesheet. Keep it organised with short section comments.\n2. App shell: fixed left history sidebar (320\u2013360px) + spacious detail/editor pane filling the rest, on cream with card surfaces. Header shows the app name and a `New note` button.\n3. History sidebar: notes newest first, each row showing date+time, grinder name, bean name (or `\u2014`), and grind size when set; unmistakable selected state (tinted background + 3px tan/brown left accent + bold title + `aria-current=\"true\"`). Clicking a row selects that note and renders it in the pane.\n4. Detail view: full note rendering with a labelled field list (brew date/time, grinder, grind size, dose/water, `Ratio 1:16.0` when both are present, bean name/origin/roast, tasting notes with `white-space: pre-wrap`), plus `Edit` and `Delete` actions in the pane header.\n5. Editor: same pane, entered by `New note` or `Edit`. Labelled inputs bound with `for`/`id`, `datetime-local` for brew date/time, number inputs for grind size/dose/water, select for grinder (options from `GET /api/grinders`, default preselected), select for roast level (unset/light/medium/dark), textarea for tasting notes. Inline field errors under the offending input with `aria-invalid=\"true\"` and `aria-describedby` pointing at the error node. `Save` shows a `Saving\u2026` disabled state while in flight and on success returns to the detail view with a success toast. `Cancel` returns to detail.\n6. New-note defaults: `brewed_at` = current local date/time as `YYYY-MM-DDTHH:MM` computed from local clock parts (never `toISOString()`), grinder = the default grinder from `GET /api/grinders`. If no grinders exist, show an inline hint pointing at Settings and allow saving with a typed grinder name (the API accepts `grinder_name` without `grinder_id`).\n7. Cancelling a brand-new note must not call the API and must not leave an empty row anywhere. Editing then cancelling reverts to the stored version.\n8. Unsaved-changes protection: `beforeunload` prompt while dirty; in-app navigation (selecting another note, opening settings, `New note` while dirty) asks for confirmation first; `Esc` in a dirty editor asks before discarding.\n9. Delete: modal confirmation dialog naming the note's date and grinder (`Delete note` is the destructive label), focus trapped, `Esc` cancels. Deletes only after confirmation.\n10. States: loading skeletons for sidebar and pane; empty state when there are no notes at all (friendly, specific copy + `New note` button); a distinct filtered/no-results empty state; API-failure banner with a `Retry` button and a plain-language message (never a raw stack trace); success toast for save/delete. Errors must never leave the UI stuck in a spinner.\n11. Basics for later cards but wired now: a settings entry point and a search input are allowed as long as they are honest (search may filter the loaded list client-side against `GET /api/notes?q=`). Demo/sample-data affordances, the full settings dialog, the mobile drawer, the `Ctrl/Cmd+N` shortcut and the accessibility sweep belong to card T3 \u2014 do not half-build them here.\n12. All network access via `fetch` to the same origin `/api/...`. No `localStorage`/`sessionStorage` holding note data (the DB is the only store). No external CDN, no analytics, no web fonts fetched over the network.\n\nQUALITY BAR: this is a portfolio-quality local app for one person \u2014 hierarchy, alignment and spacing must look deliberate, not like a bootstrap demo. Avoid clutter, excessive ornament, marketing sections and placeholder copy.\n\nVERIFY BEFORE HANDING OFF (all must actually run):\n- `npm test` still passes and `npm run check` passes (extend `scripts/check.js` only if the new files require it, e.g. new directory entries).\n- Start the server, then use `curl` to confirm the API round-trip still works, and load `http://127.0.0.1:4317/` to confirm the page and its JS/CSS/font requests all return 200 (check the server log for 404s).\n- Optional but encouraged browser smoke check: the coordinator's Playwright tooling lives outside this repo at `/home/hermes/workspace/tools/ui-evidence` (playwright + Chromium already installed). You may run a throwaway script from that directory against your running server; do not commit it here and do not install anything into this repo. If it is unavailable, say so \u2014 do not claim a browser check you did not run.\n- Write `evidence/receipts/T2-coder.md`: task id, candidate SHA, exact commands, exit codes, observed behaviour, limitations, and which of the six brief acceptance checks you exercised versus left to the tester.\n- Commit last with `git -c user.name=DesBots -c user.email=des.agent.bot@gmail.com commit`, then report the candidate SHA and changed files in your Kanban completion.\n\nBOUNDS: local-only completion, no push, no new runtime dependency, no build step, no Docker, no unrelated files. Do not touch `server/`, other cards' receipts, `docs/BRIEF.md`, `docs/SPEC.md` or `docs/ASSUMPTIONS.md`.",
     "assignee": "coder",
+    "status": "done",
+    "priority": 0,
+    "created_by": "default",
     "created_at": 1791742371,
     "started_at": 1791743203,
     "completed_at": 1791744043,
     "workspace_kind": "dir",
     "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "branch_name": null,
+    "project_id": null,
+    "claim_lock": null,
+    "claim_expires": null,
+    "tenant": null,
+    "result": null,
+    "idempotency_key": null,
+    "consecutive_failures": 0,
+    "worker_pid": null,
+    "worker_started_at": "8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|176336",
+    "last_failure_error": null,
+    "max_runtime_seconds": 5400,
+    "last_heartbeat_at": 1791744004,
+    "current_run_id": null,
+    "workflow_template_id": null,
+    "current_step_key": null,
+    "skills": "[\"team-contract\", \"team-quality\", \"team-verify\"]",
+    "model_override": null,
+    "provider_override": null,
+    "reasoning_effort": null,
+    "max_retries": null,
     "goal_mode": 1,
     "goal_max_turns": 16,
-    "max_runtime_seconds": 5400,
-    "result": null,
-    "last_failure_error": null,
-    "consecutive_failures": 0,
+    "session_id": null,
+    "block_kind": null,
+    "block_recurrences": 0,
+    "completion_contract": "local-only",
     "events": [
       {
         "created_at": 1791742371,
@@ -346,25 +393,48 @@
         "summary": "T2 frontend core is complete at candidate commit 06e72b4 (receipt a8decff): one stylesheet with the SPEC \u00a75 warm tokens, a 340px history sidebar with an unmistakable selected state, the read-only detail view and the labelled editor with dirty guards, delete confirmation, skeletons, empty/filtered states and a retryable API-error banner, all built from ES modules under public/js/ with zero dependencies and no build step. Verified with npm run check (exit 0), npm test (25/25), a live curl round-trip where every shipped asset returned 200, and a throwaway Playwright/Chromium pass that exercised 50/51 assertions against the running app \u2014 the single failure was a race in the throwaway script's own assertion, not the app; it caught and I fixed one real bug (an untouched editor reported itself dirty). Settings-as-shell, the demo chip, the mobile drawer, Ctrl/Cmd+N and the a11y sweep are left to the gated T3 card, which this completion releases.",
         "error": null
       }
-    ],
-    "comments": []
+    ]
   },
   "t_24b95f3b": {
     "id": "t_24b95f3b",
     "title": "T3 coder: settings, search, sample data, mobile drawer, accessibility polish",
-    "status": "done",
+    "body": "You are the sole implementation writer for the Coffee Notes frontend completion card. Read `docs/SPEC.md` \u00a75, \u00a77 and \u00a78 (binding), `docs/BRIEF.md` and `docs/ASSUMPTIONS.md`. Use team-contract, team-quality and team-verify. Gated on `t_465f2318` (frontend core); start from its candidate commit and read `evidence/receipts/T2-coder.md` for what it deliberately left out.\n\nSCOPE: finish and polish the frontend. Touch only `public/**` (plus `scripts/check.js` if the file list needs updating). Do NOT rewrite the core that works, do not modify `server/`, `test/`, or the docs.\n\nDELIVERABLE:\n1. **Grinder settings** (dialog on desktop \u2265820px, full-height sheet on mobile): list every grinder with its note count from `GET /api/grinders`; add form (`Add grinder`, inline error under the input for blank or duplicate names \u2014 duplicate must show the server's 409 message and must not create a row); rename; `Make default` with a clear single-default indicator (badge/radio-like control); `Remove` with a confirmation that explicitly says historical notes keep their grinder name; after removing the default the app must reflect the promoted default (or \"no grinders yet\"). All actions update the list without a full page reload, and failures show a message instead of silently doing nothing.\n2. **Search/filter** in the sidebar: text query against `GET /api/notes?q=` (debounced ~200ms, cancel stale responses so a slow response cannot overwrite a newer one), a `Clear` affordance, and a distinct \"no notes match\" empty state that is different from the \"no notes at all\" state.\n3. **Demo/sample data**: a clearly labelled `Load sample notes` action (calls `POST /api/demo/seed`) available from the empty state and from Settings, plus `Remove sample notes` (`DELETE /api/demo`). Sample rows must be visually marked as samples (e.g. a `Sample` chip) and never mixed in silently with user notes. Loading samples twice must not duplicate them.\n4. **Mobile (\u2264820px)**: sidebar becomes a drawer opened by a `Notes` button in the header, with a dimmed backdrop, body scroll lock, focus trap, `Esc` and backdrop-click close, `aria-modal=\"true\"`, and background content marked `aria-hidden`. Selecting a note closes the drawer. Single-column forms, controls \u226544px tall, no horizontal overflow at 360px width.\n5. **Keyboard**: `Ctrl/Cmd+N` starts a new note, ignored when focus is in an input/textarea/select/contenteditable or a dialog is open, and it must not hijack the browser when it cannot be handled; `Esc` closes dialogs/drawer before anything else. Visible `:focus-visible` ring (2px brown, 2px offset) everywhere, logical tab order, and a skip-to-content link if the layout benefits.\n6. **Accessibility and state audit** across the app: every control labelled, toasts in an `aria-live=\"polite\"` region, dialog focus/return-focus handled, no colour-only meaning, contrast \u22654.5:1 for body text on the cream/espresso palette, and the five states (loading, empty, validation, API-error, success) verifiably reachable. Fix what is missing in the core card rather than duplicating it.\n7. Optional: a short `docs/KEYBOARD.md` (\u226430 lines) listing the shortcuts and the accessibility behaviours you implemented. Do not turn it into a marketing page.\n\nVERIFY BEFORE HANDING OFF (all must actually run):\n- `npm run check` and `npm test` pass (they must not regress).\n- Manual/real-browser pass: run the server and exercise, at minimum, add-grinder \u2192 make default \u2192 new note \u2192 save \u2192 refresh \u2192 edit \u2192 cancel \u2192 delete-with-confirm, plus a mobile-viewport check at 390\u00d7844 and a 360px overflow check. The coordinator's Playwright tooling is at `/home/hermes/workspace/tools/ui-evidence` (Chromium installed, system libs present) \u2014 you may run throwaway scripts from that directory. Report exactly which checks you ran and which you could not.\n- `evidence/receipts/T3-coder.md`: task id, candidate SHA, commands, exit codes, observed behaviour, what you verified in a real browser, and limitations.\n- Commit last with `git -c user.name=DesBots -c user.email=des.agent.bot@gmail.com commit`, and report the candidate SHA in your completion.\n\nBOUNDS: local-only, no push, no new runtime dependency, no build step, no frameworks, no CDN, no unrelated features (no brew timers, statistics, charts, cloud sync, notifications). Keep the app one straightforward repository with simple commands.",
     "assignee": "coder",
+    "status": "done",
+    "priority": 0,
+    "created_by": "default",
     "created_at": 1791742387,
     "started_at": 1791744045,
     "completed_at": 1791745567,
     "workspace_kind": "dir",
     "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "branch_name": null,
+    "project_id": null,
+    "claim_lock": null,
+    "claim_expires": null,
+    "tenant": null,
+    "result": null,
+    "idempotency_key": null,
+    "consecutive_failures": 0,
+    "worker_pid": null,
+    "worker_started_at": null,
+    "last_failure_error": null,
+    "max_runtime_seconds": 5400,
+    "last_heartbeat_at": 1791744843,
+    "current_run_id": null,
+    "workflow_template_id": null,
+    "current_step_key": null,
+    "skills": "[\"team-contract\", \"team-quality\", \"team-verify\"]",
+    "model_override": null,
+    "provider_override": null,
+    "reasoning_effort": null,
+    "max_retries": null,
     "goal_mode": 1,
     "goal_max_turns": 16,
-    "max_runtime_seconds": 5400,
-    "result": null,
-    "last_failure_error": null,
-    "consecutive_failures": 0,
+    "session_id": null,
+    "block_kind": null,
+    "block_recurrences": 0,
+    "completion_contract": "local-only",
     "events": [
       {
         "created_at": 1791742387,
@@ -542,25 +612,48 @@
         "summary": "T3 frontend completion delivered at b69a65e (settings dialog, sample data, mobile drawer, keyboard/a11y polish). Closed by the coordinator as an operator override after the coder's run exhausted its iteration budget: the implementation and receipt are committed and were independently probed. A real defect was found in grinder state refresh (add/rename/make-default) and is tracked separately in t_ea659a25.",
         "error": null
       }
-    ],
-    "comments": []
+    ]
   },
   "t_5d0de379": {
     "id": "t_5d0de379",
     "title": "T4 tester: independent acceptance verification of the running app",
-    "status": "blocked",
+    "body": "You are the independent tester for the Coffee Notes app. Use the team-contract, team-quality, team-verify and team-debug skills. Gated on `t_24b95f3b` (frontend completion); start from that candidate commit. Read `docs/SPEC.md` and `docs/BRIEF.md` \u2014 the brief's \"Verification and visual evidence\" section defines acceptance.\n\nYOU DO NOT PATCH CODE. You reproduce behaviour against the real running app and report evidence. Any source change makes your receipt stale. If you find a defect, record the exact reproduction, the observed result, the expected result and any logs, then mark the card failed in your completion summary and comment \u2014 the coordinator will raise a narrow fix card.\n\nSETUP: `cd /home/hermes/workspace/coffee-notes`, use a **copy** of the repository (e.g. `cp -a` to `/home/hermes/.hermes/cache/scratch/t4-verify`) or at minimum a temp `COFFEE_NOTES_DB` path so your destructive delete checks never touch the real `data/coffee-notes.db`. Record the candidate SHA (`git rev-parse HEAD`) before and after your run; if it changes, re-verify.\n\nRUN THESE (record exact commands, exit codes and observed output into `evidence/receipts/T4-tester.md`):\n1. `npm run check` and `npm test` \u2014 run them yourself; do not trust the coder's receipt.\n2. Start the app (`COFFEE_NOTES_PORT=4318 npm start` with a temp DB) and confirm `GET /api/health` answers and the process binds 127.0.0.1 only (check with `ss -ltnp` that it is not listening on 0.0.0.0).\n\nACCEPTANCE CHECKS (each needs a PASS/FAIL verdict with the evidence that produced it):\n1. Add a grinder, make it the default, create a note using it \u2014 verify via API response and via the UI that the default is preselected for the new note.\n2. View a note, edit it, cancel an unsaved new note (confirm no row was created \u2014 count notes before/after), and delete a note through the confirmation dialog (and confirm the row is gone).\n3. Persistence: create notes/settings, refresh the browser page, then kill the server process and start it again \u2014 the notes and default grinder must still be there. Browser storage must not be the store: verify a fresh browser context (no storage state) still shows the data.\n4. Remove a grinder preset that historical notes use; those notes must survive with their grinder name still displayed and no crash/500.\n5. Invalid input: `2026-02-30T10:00`, `2026-10-11T25:00`, negative/absurd grind size and dose/water values \u2192 clear field-level feedback in the UI and 400 with `fields` in the API. API-failure path: make the API fail (e.g. stop the server, or request a bad id like `/api/notes/999999`) and confirm the UI shows a useful error with a retry, never a stuck spinner or a raw stack trace.\n6. Layout: desktop 1440\u00d7900 and mobile 390\u00d7844 and 360\u00d7844 \u2014 no horizontal overflow (`document.documentElement.scrollWidth <= innerWidth + 1`), drawer opens/closes with backdrop and `Esc`, all visible controls usable and \u226544px tall on mobile, focus ring visible, dialog focus trapped.\n\nBROWSER TOOLING: Playwright + Chromium are installed outside the app repo at `/home/hermes/workspace/tools/ui-evidence` (system libs installed). Run throwaway scripts from that directory (`node script.mjs`) against your test instance; do NOT install anything into the app repo and do not add playwright to the app's package.json. Save raw browser screenshots/logs you rely on under `evidence/test/` (not `evidence/ui/`, which the coordinator owns for final showcase captures).\n\nALSO CHECK: the six UI states are genuinely reachable (loading, empty, validation, API-error, success, and a distinct filtered-empty), `Ctrl/Cmd+N` does not fire while typing in an input, and the sample/demo notes are clearly marked and separable from user notes.\n\nEVIDENCE: `evidence/receipts/T4-tester.md` \u2014 150\u2013300 words plus a per-check verdict table, exact commands, exit codes, observed behaviour, limitations, and any check you could not run (a skipped check is never a pass). Raw logs may go to `evidence/test/`. Do not run `git commit` (report the SHA you tested); do not modify source, `docs/`, or another card's receipt.\n\nBUDGET: stop after two unsuccessful attempts at the same failure cause \u2014 preserve the evidence and report the blocker instead of looping.",
     "assignee": "tester",
+    "status": "blocked",
+    "priority": 0,
+    "created_by": "default",
     "created_at": 1791742407,
     "started_at": 1791745851,
     "completed_at": null,
     "workspace_kind": "dir",
     "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "branch_name": null,
+    "project_id": null,
+    "claim_lock": null,
+    "claim_expires": null,
+    "tenant": null,
+    "result": null,
+    "idempotency_key": null,
+    "consecutive_failures": 2,
+    "worker_pid": null,
+    "worker_started_at": null,
+    "last_failure_error": "Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations",
+    "max_runtime_seconds": 5400,
+    "last_heartbeat_at": 1791746826,
+    "current_run_id": null,
+    "workflow_template_id": null,
+    "current_step_key": null,
+    "skills": "[\"team-contract\", \"team-quality\", \"team-verify\", \"team-debug\"]",
+    "model_override": null,
+    "provider_override": null,
+    "reasoning_effort": null,
+    "max_retries": null,
     "goal_mode": 1,
     "goal_max_turns": 18,
-    "max_runtime_seconds": 5400,
-    "result": null,
-    "last_failure_error": "Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations",
-    "consecutive_failures": 2,
+    "session_id": null,
+    "block_kind": null,
+    "block_recurrences": 0,
+    "completion_contract": "local-only",
     "events": [
       {
         "created_at": 1791742407,
@@ -746,25 +839,48 @@
         "summary": null,
         "error": "Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations"
       }
-    ],
-    "comments": []
+    ]
   },
   "t_8fc61842": {
     "id": "t_8fc61842",
     "title": "T5 reviewer: independent diff review and complexity assessment",
-    "status": "todo",
+    "body": "You are the independent reviewer for the Coffee Notes app. Use the team-contract, team-quality, team-verify and team-review skills. Gated on `t_5d0de379` (tester); read the tester receipt and the two coder receipts first (`evidence/receipts/`), plus `docs/SPEC.md` and `docs/BRIEF.md`.\n\nYOU DO NOT PATCH CODE. You inspect the actual diff and the actual repository state, then report defects, risks and needless complexity with file:line references. Do not rewrite the implementation; return findings so the coordinator can raise a narrow fix card.\n\nSTART: `cd /home/hermes/workspace/coffee-notes`, record `git rev-parse HEAD` and `git status` (a dirty tree means the candidate is not what the receipts describe \u2014 report it). The implementation diff to review is `a7c465d..HEAD` (baseline docs commit through the final candidate). Read the code, not just the receipts.\n\nREVIEW TASKS (each needs a verdict and evidence: file:line, command output, or a reproduction):\n1. **Correctness against the brief.** Walk the brief's core feature list (create/browse/view/edit/delete, newest-first history with summaries and selected state, brew date+time/grinder/grind size/1:X ratio/bean info/notes, local-time defaults with no UTC shift, settings add/remove/default grinders with duplicate and blank handling, removal preserving historical notes, new-note action, save/cancel, clear validation, safe delete confirmation, no empty record from a cancelled new note, unsaved-edit protection, sidebar+detail desktop layout, mobile drawer with backdrop, `Ctrl/Cmd+N`, search/filter). Flag anything the code does not actually implement, or implements only in appearance.\n2. **Data-integrity and security risks in the server.** SQL string building vs prepared statements; path traversal on static file serving; JSON body size limits; validation that can be bypassed (`Infinity`/`NaN`, numeric strings, negative values, out-of-range dates like `2026-02-30`); whether a deleted grinder's notes really keep their snapshot name; whether `grinder_name` can be spoofed to bypass the FK; error responses that leak stack traces or file paths.\n3. **Frontend risk.** How user-controlled text is inserted into the DOM (any `innerHTML`/`insertAdjacentHTML` with note or grinder content is an XSS defect \u2014 verify with a note containing `<img src=x onerror=...>`); stale-response races in search; listener leaks; state duplicated between sidebar/detail/editor; anything that could lose a draft.\n4. **Unnecessary complexity (explicitly requested by the owner).** Check for one-use abstractions, interfaces with a single implementation, speculative options, dead code, duplicated helpers, a hand-rolled router or DB layer that is larger than the job needs, over-engineered module splits, and tests that mirror the implementation instead of asserting behaviour. Say plainly which files/units you would merge or delete, and estimate the lines removable. Also state what you think is *appropriately* simple so the assessment is balanced.\n5. **Evidence honesty.** Do the receipts' claims match what you can verify (commands, exit codes, SHAs)? Is any check claimed that cannot be reproduced? Are the tester's verdicts supported by artifacts in `evidence/`? Note any check that is claimed rather than demonstrated.\n\nEVIDENCE: `evidence/receipts/T5-reviewer.md` \u2014 around 200\u2013300 words plus a findings list; each finding has severity (blocker / should-fix / nice-to-have), file:line, why it matters, and the smallest sensible fix. State clearly whether you recommend shipping as-is, shipping with follow-ups, or a fix cycle. Report the SHA you reviewed and note if the tree changed under you.\n\nBOUNDS: read-only inspection plus throwaway commands in a scratch copy. Do not modify repository source, docs, receipts or another card's work. Do not commit. Do not install anything into the app repo. If you need a running instance, use a scratch copy with a temp `COFFEE_NOTES_DB` and a non-default port.",
     "assignee": "reviewer",
+    "status": "done",
+    "priority": 0,
+    "created_by": "default",
     "created_at": 1791744081,
-    "started_at": null,
-    "completed_at": null,
+    "started_at": 1791748320,
+    "completed_at": 1791748950,
     "workspace_kind": "dir",
     "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "branch_name": null,
+    "project_id": null,
+    "claim_lock": null,
+    "claim_expires": null,
+    "tenant": null,
+    "result": null,
+    "idempotency_key": null,
+    "consecutive_failures": 0,
+    "worker_pid": null,
+    "worker_started_at": "8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|718250",
+    "last_failure_error": null,
+    "max_runtime_seconds": 4200,
+    "last_heartbeat_at": 1791748932,
+    "current_run_id": null,
+    "workflow_template_id": null,
+    "current_step_key": null,
+    "skills": "[\"team-contract\", \"team-quality\", \"team-verify\"]",
+    "model_override": null,
+    "provider_override": null,
+    "reasoning_effort": null,
+    "max_retries": null,
     "goal_mode": 1,
     "goal_max_turns": 16,
-    "max_runtime_seconds": 4200,
-    "result": null,
-    "last_failure_error": null,
-    "consecutive_failures": 0,
+    "session_id": null,
+    "block_kind": null,
+    "block_recurrences": 0,
+    "completion_contract": "local-only",
     "events": [
       {
         "created_at": 1791744081,
@@ -783,27 +899,203 @@
         "run_id": null,
         "kind": "linked",
         "payload": "{\"parent\": \"t_a1c985a8\", \"child\": \"t_8fc61842\"}"
+      },
+      {
+        "created_at": 1791748035,
+        "run_id": null,
+        "kind": "unlinked",
+        "payload": "{\"parent\": \"t_5d0de379\", \"child\": \"t_8fc61842\"}"
+      },
+      {
+        "created_at": 1791748036,
+        "run_id": null,
+        "kind": "unlinked",
+        "payload": "{\"parent\": \"t_a1c985a8\", \"child\": \"t_8fc61842\"}"
+      },
+      {
+        "created_at": 1791748037,
+        "run_id": null,
+        "kind": "promoted",
+        "payload": null
+      },
+      {
+        "created_at": 1791748320,
+        "run_id": 17,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791749220, \"run_id\": 17}"
+      },
+      {
+        "created_at": 1791748320,
+        "run_id": 17,
+        "kind": "spawned",
+        "payload": "{\"pid\": 51378, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|688098\"}"
+      },
+      {
+        "created_at": 1791748325,
+        "run_id": 17,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748385,
+        "run_id": 17,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748446,
+        "run_id": 17,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748488,
+        "run_id": 17,
+        "kind": "heartbeat",
+        "payload": "{\"note\": \"Read docs, all receipts, full source; ran npm run check (0), npm test (25/25); server probes on 4399. Now XSS/DOM probe and remaining receipt honesty checks.\"}"
+      },
+      {
+        "created_at": 1791748507,
+        "run_id": 17,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748567,
+        "run_id": 17,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748597,
+        "run_id": 17,
+        "kind": "timed_out",
+        "payload": "{\"error\": \"Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations\", \"failures\": 1, \"retry_status\": \"ready\"}"
+      },
+      {
+        "created_at": 1791748622,
+        "run_id": 19,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791749522, \"run_id\": 19}"
+      },
+      {
+        "created_at": 1791748622,
+        "run_id": 19,
+        "kind": "spawned",
+        "payload": "{\"pid\": 53856, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|718250\"}"
+      },
+      {
+        "created_at": 1791748627,
+        "run_id": 19,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748686,
+        "run_id": 19,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748747,
+        "run_id": 19,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748807,
+        "run_id": 19,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748868,
+        "run_id": 19,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748932,
+        "run_id": 19,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748936,
+        "run_id": null,
+        "kind": "commented",
+        "payload": "{\"author\": \"reviewer\", \"len\": 2033}"
+      },
+      {
+        "created_at": 1791748950,
+        "run_id": 19,
+        "kind": "completed",
+        "payload": "{\"result_len\": 0, \"summary\": \"Independently reviewed candidate 99c1bfa (source frozen at c1222f9; c1222f9..HEAD touches evidence only). Reproduced npm run check (exit 0) and npm test (25/25), ran 12 API probes and a Chromium XSS/DOM probe (13/13) on scratch instances whose own startup lines proved I was not hitting a stray server. No blocker and no data-integrity or XSS defect; the brief's features are genuinely implemented. O\", \"artifacts\": [\"/home/hermes/workspace/coffee-notes/evidence/receipts/T5-reviewer.md\"]}"
       }
     ],
-    "runs": [],
-    "comments": []
+    "runs": [
+      {
+        "id": 17,
+        "profile": "reviewer",
+        "status": "timed_out",
+        "started_at": 1791748320,
+        "ended_at": 1791748597,
+        "outcome": "timed_out",
+        "summary": null,
+        "error": "Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations"
+      },
+      {
+        "id": 19,
+        "profile": "reviewer",
+        "status": "done",
+        "started_at": 1791748622,
+        "ended_at": 1791748950,
+        "outcome": "completed",
+        "summary": "Independently reviewed candidate 99c1bfa (source frozen at c1222f9; c1222f9..HEAD touches evidence only). Reproduced npm run check (exit 0) and npm test (25/25), ran 12 API probes and a Chromium XSS/DOM probe (13/13) on scratch instances whose own startup lines proved I was not hitting a stray server. No blocker and no data-integrity or XSS defect; the brief's features are genuinely implemented. One should-fix: opening Settings from the editor clears state without re-rendering, leaving the abandoned editor mounted so a discarded draft can still be saved. Four nice-to-haves (oversized-body reset vs documented 400, ~12-15 lines of unused surface, SPEC/node --test mismatch, coordinator-side evidence gaps). Receipt: evidence/receipts/T5-reviewer.md (uncommitted).",
+        "error": null
+      }
+    ]
   },
   "t_ea659a25": {
     "id": "t_ea659a25",
     "title": "T3b coder: fix stale grinder state in Settings (add/rename/make-default never refresh)",
-    "status": "done",
+    "body": "Narrow fix card for the Coffee Notes frontend. Use team-quality and team-verify. Read `docs/SPEC.md` \u00a78 first. Repository: `/home/hermes/workspace/coffee-notes`, branch `main`, start from the current HEAD (`7f39dc4`, i.e. T3's candidate `b69a65e` plus its receipt).\n\n## Confirmed defect (found and reproduced by the coordinator)\n**Grinder settings never reflect changes made while its dialog is open.**\n\nRoot cause, in `public/app.js` `showSettings()` (around lines 410\u2013445): the `actions` object refreshes application state for `remove` (calls `await loadGrinders()`), `seed` and `clearDemo`, but **`add`, `rename` and `makeDefault` only perform the API call and never call `loadGrinders()`**. `createSettings` re-reads the list through `snapshot()` \u2192 `settingsSnapshot()` \u2192 `state.grinders`, which is therefore stale, so `render()` redraws the same old list. `public/js/settings.js`'s own docstring claims \"the visible list cannot drift from the server\" \u2014 it currently can.\n\nObserved (fresh DB, Playwright/Chromium, desktop 1440\u00d7900):\n- Open Settings with 0 presets \u2192 add \"Alpha Grinder\" and \"Beta Grinder\": the status line says `Alpha Grinder added.` / `Beta Grinder added.` and `GET /api/grinders` returns both rows, but the dialog shows **0 rows** \u2014 still 0 rows 3 s and 6 s later, and the empty-state message stays. The presets are invisible and unusable.\n- Open Settings when presets already exist, then click `Make default` on a non-default preset: `GET /api/grinders` shows the new `is_default`, but the `Default` badge stays on the old row.\n- Same staleness class for `rename` and for the editor/sidebar grinder list after an add.\n\n## Required change\nMake every grinder mutation refresh the application's grinder state before the dialog re-renders, exactly the way `remove` already does:\n- `add`: `const payload = await api.createGrinder(name); await loadGrinders(); return payload.grinder;`\n- `rename`: rename, then `await loadGrinders()`, return the grinder.\n- `makeDefault`: set the default, then `await loadGrinders()`, return the grinder.\nKeep the existing `remove`/`seed`/`clearDemo` behaviour. Do not restructure `createSettings`, do not change the API, `server/`, `test/`, docs, or the other receipts. Prefer the smallest diff that makes the state refresh correct; if a single shared helper removes three near-identical blocks, that is acceptable and preferable to triplication.\n\n## Verify before handing off (keep this tight)\n1. `npm run check` and `npm test` both still pass.\n2. Real-browser repro, from an **empty database** (`COFFEE_NOTES_DB` in the process scratch dir, a non-default port): open Settings \u2192 add two grinders \u2192 both rows appear with the first one carrying `Default` \u2192 click `Make default` on the second \u2192 the badge moves to it \u2192 rename a grinder and see the new name \u2192 remove one and see it go, with its note count and any notes intact.\n   The coordinator's tooling is at `/home/hermes/workspace/tools/ui-evidence` (Playwright + Chromium already installed). `bash run-sweep.sh <port>` runs a broader 30-check acceptance sweep against a fresh DB \u2014 use it if you like, but do not add it or playwright to this repository.\n3. Do NOT perform a broad regression sweep or investigate unrelated areas \u2014 the tester card `t_5d0de379` owns full acceptance verification and the reviewer card `t_5d0de379`'s successor owns the code review.\n\n## Delivery\n- Commit early rather than late: commit the fix as soon as checks pass, with `git -c user.name=DesBots -c user.email=des.agent.bot@gmail.com commit`.\n- Write `evidence/receipts/T3b-coder.md` (\u2264200 words): task id, candidate SHA, the exact commands, exit codes, the observed before/after behaviour in a real browser, limitations.\n- Complete the card with the candidate SHA. Local-only: no push, no new dependency, no build step.\n\nBUDGET: this is a small, precisely located fix. Stop after two unsuccessful attempts at the same symptom, preserve the evidence and report the blocker rather than looping.",
     "assignee": "coder",
+    "status": "done",
+    "priority": 0,
+    "created_by": "default",
     "created_at": 1791745536,
     "started_at": 1791745550,
     "completed_at": 1791745835,
     "workspace_kind": "dir",
     "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "branch_name": null,
+    "project_id": null,
+    "claim_lock": null,
+    "claim_expires": null,
+    "tenant": null,
+    "result": null,
+    "idempotency_key": null,
+    "consecutive_failures": 0,
+    "worker_pid": null,
+    "worker_started_at": "8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|411075",
+    "last_failure_error": null,
+    "max_runtime_seconds": 3000,
+    "last_heartbeat_at": 1791745804,
+    "current_run_id": null,
+    "workflow_template_id": null,
+    "current_step_key": null,
+    "skills": "[\"team-contract\", \"team-quality\", \"team-verify\"]",
+    "model_override": null,
+    "provider_override": null,
+    "reasoning_effort": null,
+    "max_retries": null,
     "goal_mode": 1,
     "goal_max_turns": 10,
-    "max_runtime_seconds": 3000,
-    "result": null,
-    "last_failure_error": null,
-    "consecutive_failures": 0,
+    "session_id": null,
+    "block_kind": null,
+    "block_recurrences": 0,
+    "completion_contract": "local-only",
     "events": [
       {
         "created_at": 1791745536,
@@ -871,25 +1163,48 @@
         "summary": "Fixed the stale grinder state in Settings: public/app.js now routes add/rename/makeDefault through a mutateGrinder() helper that awaits loadGrinders() before the dialog re-renders (matching remove). Candidate 4f982fe; receipt 88f6660. npm run check and npm test pass (25/25), and a Playwright/Chromium repro against a fresh empty DB goes from 4/15 to 15/15 checks (before: added presets never rendered, no row actions reachable).",
         "error": null
       }
-    ],
-    "comments": []
+    ]
   },
   "t_22570dcc": {
     "id": "t_22570dcc",
     "title": "T6 coder: fix detail-load error feedback and dialog focus traps",
-    "status": "done",
+    "body": "Narrow fix card for three confirmed defects in the Coffee Notes frontend. Use team-quality and team-verify. Read `docs/SPEC.md` \u00a78 (states, dialogs, accessibility) first. Repository: `/home/hermes/workspace/coffee-notes`, branch `main`, start from the current HEAD. Do NOT touch `server/`, `test/`, `docs/`, or other cards' receipts; keep the diff small and targeted.\n\nAll three were reproduced by the coordinator with Playwright/Chromium in `public/`-only code paths (probe output on request; tooling lives in `/home/hermes/workspace/tools/ui-evidence`, run throwaway scripts from there and never commit them or playwright into this repo).\n\n## Defect 1 \u2014 a failed single-note load gives the user nothing (acceptance check #5)\nRepro: seed one note, open the app, then `page.route('**/api/notes/*', r => r.abort())` and click a history row.\nObserved: `GET /api/notes/:id` fails, and afterwards `#banner` is `hidden` with empty text and there is **no Retry button anywhere** in the document (`retryButtons=0`). The pane keeps showing the previous note as if nothing happened.\nRequired: a failed detail/editor load must surface the same visible banner + `Retry` affordance the failed *list* load already uses, with a plain-language message, and `Retry` must succeed once the API is reachable again (reload the selected note and render it). The failure must not leave the pane showing stale content as if it were current.\n\n## Defect 2 \u2014 the delete confirmation dialog does not take or trap focus\nRepro: click a history row, click `Delete`, then press `Tab` repeatedly and inspect `document.activeElement`.\nObserved: on open, focus is on `<body>` (the dialog never takes focus), and the containment sequence alternates \u2014 every second `Tab` lands outside the dialog (`truefalsetruefalse\u2026`).\nRequired: on open, move focus into the confirmation dialog; the initial focus should be the non-destructive choice (`Keep note`), `Tab`/`Shift+Tab` must cycle only through the dialog's controls, `Esc` still cancels, and focus returns to the `Delete` button that opened it when the dialog closes.\n\n## Defect 3 \u2014 the settings dialog focus trap leaks\nRepro: open `Settings`, press `Tab` twelve times then `Shift+Tab` four times, recording `dialog[open].contains(document.activeElement)` each time.\nObserved: containment is `truetruetruetruetruetruefalse\u2026` \u2014 focus escapes the dialog after roughly six tabs (the dialog body is re-rendered after actions, so a trap that resolves its focusable list once, or that ignores buttons while they are disabled, goes stale).\nRequired: focus stays inside `dialog[open]` for any number of tab presses, including after an add/rename/make-default action re-renders the list, and after a control becomes disabled while busy. `Esc` closes and focus returns to the `Settings` button.\n\n## Constraints\n- Any shared focus-trap helper must stay small; if the existing dialog code already provides a trap, fix the cause rather than adding a second mechanism. No new runtime dependency.\n- Keep the visual language and copy unchanged. Do not restyle anything.\n- Preserve the behaviours already verified: `Ctrl/Cmd+N` typing guard, unsaved-changes guard, delete confirmation copy, sample-data labelling, search, and the mobile drawer.\n\n## Verify before handing off (tight)\n1. `npm run check` and `npm test` still pass (no regressions).\n2. Real browser on a fresh scratch DB and a non-default port, re-running exactly the three repros above and reporting the before/after numbers for the focus-containment sequences and the banner/Retry presence.\n3. Commit early (as soon as checks pass) with `git -c user.name=DesBots -c user.email=des.agent.bot@gmail.com commit`, then write `evidence/receipts/T6-coder.md` (\u2264200 words: task id, candidate SHA, commands, exit codes, observed before/after, limitations) and complete the card with the SHA.\n4. Do not perform a broad regression sweep \u2014 card `t_5d0de379`'s successor re-verifies the full acceptance set.\n\nBUDGET: stop after two unsuccessful attempts at the same symptom, preserve evidence and report the blocker.",
     "assignee": "coder",
+    "status": "done",
+    "priority": 0,
+    "created_by": "default",
     "created_at": 1791746511,
     "started_at": 1791746874,
     "completed_at": 1791747675,
     "workspace_kind": "dir",
     "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "branch_name": null,
+    "project_id": null,
+    "claim_lock": null,
+    "claim_expires": null,
+    "tenant": null,
+    "result": null,
+    "idempotency_key": null,
+    "consecutive_failures": 0,
+    "worker_pid": null,
+    "worker_started_at": "8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|591685",
+    "last_failure_error": null,
+    "max_runtime_seconds": 3600,
+    "last_heartbeat_at": 1791747665,
+    "current_run_id": null,
+    "workflow_template_id": null,
+    "current_step_key": null,
+    "skills": "[\"team-contract\", \"team-quality\", \"team-verify\"]",
+    "model_override": null,
+    "provider_override": null,
+    "reasoning_effort": null,
+    "max_retries": null,
     "goal_mode": 1,
     "goal_max_turns": 12,
-    "max_runtime_seconds": 3600,
-    "result": null,
-    "last_failure_error": null,
-    "consecutive_failures": 0,
+    "session_id": null,
+    "block_kind": null,
+    "block_recurrences": 0,
+    "completion_contract": "local-only",
     "events": [
       {
         "created_at": 1791746511,
@@ -1039,25 +1354,48 @@
         "summary": "Fixed all three Coffee Notes defects at candidate c1222f9 (public/app.js + public/js/dialog.js, 46 insertions). selectNote no longer skips a re-read, so a failed detail load raises the shared banner + Retry and clears the stale pane; dialog.js gained a small, per-keypress focusable scan + Tab wrap plus explicit initial focus, so both dialogs take and hold focus and return it to their opener. npm run check exit 0 and npm test 25/25 pass; all three repros re-run in real Chromium before/after on scratch DBs (ports 4351/4352). Receipt at evidence/receipts/T6-coder.md.",
         "error": null
       }
-    ],
-    "comments": []
+    ]
   },
   "t_a1c985a8": {
     "id": "t_a1c985a8",
     "title": "T4b tester: re-verify acceptance after the T6 fix (focused)",
-    "status": "running",
+    "body": "Focused independent re-verification of the Coffee Notes candidate after the T6 fix. Use team-contract, team-quality, team-verify, team-debug. Gated on `t_22570dcc` (T6). Start from that candidate commit; source changes invalidate the earlier T4 receipt, so this card re-establishes acceptance on the fixed code.\n\nYOU DO NOT PATCH CODE. Report evidence with PASS/FAIL verdicts.\n\nCONTEXT: the previous tester run (`t_5d0de379`) verified candidate `88f6660` and its raw artifacts are preserved in `evidence/test/` (`t4-acceptance.log`, `t4-acceptance.json`, `t4-api-checks.txt`) \u2014 41/45 checks passed. Your job is to (a) confirm the three defects it flagged are actually fixed, and (b) re-confirm the acceptance set on the new candidate rather than re-deriving it from scratch.\n\nWORK EFFICIENTLY \u2014 the previous run lost its budget before writing its receipt:\n1. **Write `evidence/receipts/T4b-tester.md` FIRST**, with the verdict table skeleton and the candidate SHA, then fill it in as you go and update it after every few checks. Evidence must survive an interrupted run.\n2. Use the tooling that already exists: your own throwaway scripts from last time (re-create them if gone) and, if useful, the coordinator's harness at `/home/hermes/workspace/tools/ui-evidence` (`bash run-sweep.sh <port>` = fresh DB + own port + ~36 browser checks; `sweep.mjs`, `probe-a11y.mjs`, `capture.mjs`). You may run these, but your verdicts must still come from what you observe, and you must state which checks you ran yourself.\n3. Use a **copy** of the repo or a scratch `COFFEE_NOTES_DB` and a non-default port so nothing touches `data/coffee-notes.db`. Record `git rev-parse HEAD` before and after; a changed SHA means the receipt is stale.\n4. Budget your turns: prioritise the six brief acceptance checks, then the previously-failing checks, then everything else. If you run out of budget, the receipt you have written is the deliverable.\n\nMUST VERIFY (each with its own verdict and the evidence behind it):\n1. **Defect 1 fixed** \u2014 with `page.route('**/api/notes/*', r => r.abort())` (GET only), clicking a history row produces a visible banner with a plain-language message and a working `Retry`; after removing the route and clicking `Retry`, the selected note renders. No stale pane content presented as current.\n2. **Defect 2 fixed** \u2014 the delete confirmation takes focus on open (first focus inside the dialog), `Tab`/`Shift+Tab` keep `dialog[open].contains(document.activeElement)` true for \u226512 presses, `Esc` cancels, and focus returns to the `Delete` button.\n3. **Defect 3 fixed** \u2014 the settings dialog keeps focus inside for \u226512 `Tab` presses and \u22654 `Shift+Tab` presses, including after an add/rename/make-default re-render.\n4. The brief's six acceptance checks: (1) add a grinder, make it the default, create a note with it, default preselected; (2) view/edit a note, cancel an unsaved new note with no row created, delete with confirmation; (3) refresh AND a real server-process restart (kill the process, start it again on the same DB) \u2014 notes and grinder settings persist; a fresh browser context with no storage still shows the data; (4) remove a grinder preset that historical notes use \u2014 those notes survive with their grinder name and no 500; (5) invalid dates/numeric values give field-level feedback in UI and API, and API failures give useful feedback with a retry; (6) desktop 1440\u00d7900, mobile 390\u00d7844 and 360\u00d7844 \u2014 no horizontal overflow, drawer opens with backdrop, `Esc` closes it, controls usable.\n5. Mobile drawer accessibility (your previous run never reached this): backdrop present, `Esc` and backdrop-click close, focus moves into the drawer and returns on close, background `aria-hidden`, `aria-modal`, body scroll locked. Report honestly if a check fails or could not be run.\n\nEVIDENCE: `evidence/receipts/T4b-tester.md` \u2014 150\u2013300 words plus the per-check verdict table, exact commands, exit codes, observed values, limitations, and any check you could not run (a skipped check is never a pass). Raw logs/screenshots may go to `evidence/test/`. Do not commit anything; do not modify source, `docs/`, or other receipts. Stop after two attempts at the same failure cause.",
     "assignee": "tester",
+    "status": "done",
+    "priority": 0,
+    "created_by": "default",
     "created_at": 1791746526,
     "started_at": 1791747718,
-    "completed_at": null,
+    "completed_at": 1791748335,
     "workspace_kind": "dir",
     "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "branch_name": null,
+    "project_id": null,
+    "claim_lock": null,
+    "claim_expires": null,
+    "tenant": null,
+    "result": null,
+    "idempotency_key": null,
+    "consecutive_failures": 0,
+    "worker_pid": null,
+    "worker_started_at": null,
+    "last_failure_error": null,
+    "max_runtime_seconds": 4200,
+    "last_heartbeat_at": 1791748276,
+    "current_run_id": null,
+    "workflow_template_id": null,
+    "current_step_key": null,
+    "skills": "[\"team-contract\", \"team-quality\", \"team-verify\", \"team-debug\"]",
+    "model_override": null,
+    "provider_override": null,
+    "reasoning_effort": null,
+    "max_retries": null,
     "goal_mode": 1,
     "goal_max_turns": 14,
-    "max_runtime_seconds": 4200,
-    "result": null,
-    "last_failure_error": null,
-    "consecutive_failures": 0,
+    "session_id": null,
+    "block_kind": null,
+    "block_recurrences": 0,
+    "completion_contract": "local-only",
     "events": [
       {
         "created_at": 1791746526,
@@ -1106,20 +1444,238 @@
         "run_id": 15,
         "kind": "heartbeat",
         "payload": null
+      },
+      {
+        "created_at": 1791747909,
+        "run_id": 15,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747971,
+        "run_id": 15,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748002,
+        "run_id": 15,
+        "kind": "timed_out",
+        "payload": "{\"error\": \"Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations\", \"failures\": 1, \"retry_status\": \"ready\"}"
+      },
+      {
+        "created_at": 1791748019,
+        "run_id": 16,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791748919, \"run_id\": 16}"
+      },
+      {
+        "created_at": 1791748019,
+        "run_id": 16,
+        "kind": "spawned",
+        "payload": "{\"pid\": 48358, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|657973\"}"
+      },
+      {
+        "created_at": 1791748023,
+        "run_id": 16,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748089,
+        "run_id": 16,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748149,
+        "run_id": 16,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748216,
+        "run_id": 16,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748276,
+        "run_id": 16,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791748303,
+        "run_id": 16,
+        "kind": "gave_up",
+        "payload": "{\"failures\": 2, \"effective_limit\": 2, \"limit_source\": \"dispatcher\", \"error\": \"Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations\", \"trigger_outcome\": \"timed_out\", \"retry_status\": \"ready\", \"budget_used\": 30, \"budget_max\": 30}"
+      },
+      {
+        "created_at": 1791748335,
+        "run_id": 18,
+        "kind": "completed",
+        "payload": "{\"result_len\": 0, \"summary\": \"Independent re-verification of candidate c1222f9 by the tester profile: every check in its verdict table is PASS with raw logs attached \u2014 the three defects are fixed (failed detail load shows a plain-language banner and a Retry that restores the detail; the delete confirmation opens focused on 'Keep note' and contains 12 Tabs and 4 Shift+Tabs, Esc returns focus to Delete; the settings dialog conta\"}"
       }
     ],
     "runs": [
       {
         "id": 15,
         "profile": "tester",
-        "status": "running",
+        "status": "timed_out",
         "started_at": 1791747718,
-        "ended_at": null,
-        "outcome": null,
+        "ended_at": 1791748002,
+        "outcome": "timed_out",
         "summary": null,
+        "error": "Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations"
+      },
+      {
+        "id": 16,
+        "profile": "tester",
+        "status": "gave_up",
+        "started_at": 1791748019,
+        "ended_at": 1791748303,
+        "outcome": "gave_up",
+        "summary": null,
+        "error": "Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations"
+      },
+      {
+        "id": 18,
+        "profile": "tester",
+        "status": "completed",
+        "started_at": 1791748335,
+        "ended_at": 1791748335,
+        "outcome": "completed",
+        "summary": "Independent re-verification of candidate c1222f9 by the tester profile: every check in its verdict table is PASS with raw logs attached \u2014 the three defects are fixed (failed detail load shows a plain-language banner and a Retry that restores the detail; the delete confirmation opens focused on 'Keep note' and contains 12 Tabs and 4 Shift+Tabs, Esc returns focus to Delete; the settings dialog contains focus including after add/rename/make-default re-renders), acceptance checks 1-6 pass (grinder add/default, note CRUD and validation, refresh + process restart + fresh browser context persistence measured PERSISTENCE: PASS, removing a used preset keeps history at API and UI level, desktop 1440 and mobile 390/360 without overflow with a working accessible drawer), npm run check exit 0 and npm test 25/25 pass. The single failing sweep line is a harness assertion bug the tester diagnosed (it waits for a placeholder while the app correctly re-renders the selected note), not a product defect. The card ended blocked only because the run's iteration budget expired while it was finalising.",
         "error": null
       }
+    ]
+  },
+  "t_0270576b": {
+    "id": "t_0270576b",
+    "title": "T7 coder: apply the review's should-fix (discarded draft stays live) and reconcile the SPEC test script",
+    "body": "Small fix card from the independent review (T5 reviewer receipt: `evidence/receipts/T5-reviewer.md`). Repository `/home/hermes/workspace/coffee-notes`, branch `main`, start from current HEAD (`99c1bfa`; source frozen at `c1222f9`). Use team-quality and team-verify. Keep the diff minimal \u2014 the more files this touches, the more verification it invalidates.\n\n## F1 \u2014 should-fix: a discarded draft can still be saved (source change required)\n`public/app.js`, `withGuard` (\u2248225-230) and `openSettings` (\u2248398-401). Opening Settings while the editor is dirty discards the editor in state (`state.editor = null`, `pane = 'idle'`) **without re-rendering the pane**, so the abandoned editor form stays mounted in the DOM and remains live. The reviewer's probe on a scratch instance:\n`S4 editor form still in pane: 1`, `S5 placeholder: 0`, `S6 after Esc: still 1`, `S7 notes stored after saving the abandoned form: [\"Stale form write\", \u2026]`, and after choosing *Discard changes* the draft is still readable and saveable (`S11`/`S12`) while `isDirty()` no longer guards it.\n\nThat contradicts two brief requirements: cancelling/discarding must not resurrect a discarded note, and unsaved edits must be protected. Every other editor exit path already re-renders; `withGuard` does not.\n\nReviewer's suggested smallest fix: call `renderPane()` after `closeEditor()` inside `withGuard` (mirroring the other exit paths). Verify what the real flow needs rather than assuming \u2014 the check is that after choosing *Discard changes* from the guard dialog, the discarded form is gone from the pane and cannot write to the API.\n\n## F4 \u2014 docs drift, same card, no behaviour change\n`docs/SPEC.md` \u00a76 still documents `test: node --test test/`, but `package.json` and `scripts/check.js` use bare `node --test` because a directory argument exits 1 on Node 26.7.0 (`Cannot find module '\u2026/test'`). Reconcile the SPEC with the working command, or note the Node-version constraint next to the script. Do not change the script itself.\n\n## Explicitly NOT in scope (recorded as accepted nice-to-haves, do not fix here)\n- Oversized bodies above ~16\u00d7 the 256 KB limit drain with `req.destroy()`, giving a connection reset instead of the documented 400 (`server/router.js` \u224887-113). Server stays healthy; 300 KB still returns a clean 400.\n- ~12-15 lines of unused surface: `server/api.js` re-exports `ApiError` with no importer, `server/router.js` returns `routes` unread, `public/js/drawer.js` exports `open`/`syncMode` unused, `server/static.js` exports `contentTypeFor` used only internally, `FOCUSABLE` duplicated in `dialog.js` and `drawer.js`.\n\n## Verify before handing off (tight)\n1. `npm run check` exit 0 and `npm test` 25/25 \u2014 no regressions.\n2. Real browser repro on a fresh scratch DB and non-default port: load a note \u2192 `Edit` \u2192 type into a field (make it dirty) \u2192 open `Settings` \u2192 choose *Discard changes* \u2192 assert the editor form is no longer in the pane and that the discarded values cannot reach the API (the note count and the stored note are unchanged). Repeat for a **dirty new note** (the `New note` \u2192 dirty \u2192 Settings \u2192 Discard path) and assert no row is created. Report the before/after observations.\n3. Confirm the normal paths still behave: dirty-edit `Cancel` reverts, clean cancel leaves the detail view, `Esc` still guards, saving a real edit still works.\n4. Commit early with `git -c user.name=DesBots -c user.email=des.agent.bot@gmail.com commit`, then write `evidence/receipts/T7-coder.md` (\u2264200 words: task id, candidate SHA, commands, exit codes, observed before/after for both repro paths, limitations) and complete the card with the SHA.\n5. Local-only: no push (the coordinator publishes), no new dependency, no refactor beyond the two items above, no restyling.\n\nBUDGET: small and precisely located. Stop after two attempts at the same symptom and report the blocker with evidence instead of looping.",
+    "assignee": "coder",
+    "status": "done",
+    "priority": 0,
+    "created_by": "default",
+    "created_at": 1791748990,
+    "started_at": 1791749043,
+    "completed_at": 1791749415,
+    "workspace_kind": "dir",
+    "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "branch_name": null,
+    "project_id": null,
+    "claim_lock": null,
+    "claim_expires": null,
+    "tenant": null,
+    "result": null,
+    "idempotency_key": null,
+    "consecutive_failures": 0,
+    "worker_pid": null,
+    "worker_started_at": "8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|760428",
+    "last_failure_error": null,
+    "max_runtime_seconds": 3000,
+    "last_heartbeat_at": 1791749408,
+    "current_run_id": null,
+    "workflow_template_id": null,
+    "current_step_key": null,
+    "skills": "[\"team-contract\", \"team-quality\", \"team-verify\"]",
+    "model_override": null,
+    "provider_override": null,
+    "reasoning_effort": null,
+    "max_retries": null,
+    "goal_mode": 1,
+    "goal_max_turns": 10,
+    "session_id": null,
+    "block_kind": null,
+    "block_recurrences": 0,
+    "completion_contract": "local-only",
+    "events": [
+      {
+        "created_at": 1791748990,
+        "run_id": null,
+        "kind": "created",
+        "payload": "{\"assignee\": \"coder\", \"status\": \"ready\", \"parents\": [], \"creator_task_id\": null, \"tenant\": null, \"workspace_kind\": \"dir\", \"workspace_path\": \"/home/hermes/workspace/coffee-notes\", \"branch_name\": null, \"project_id\": null, \"skills\": [\"team-contract\", \"team-quality\", \"team-verify\"], \"goal_mode\": true, \"model_override\": null, \"provider_override\": null}"
+      },
+      {
+        "created_at": 1791749043,
+        "run_id": 20,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791749943, \"run_id\": 20}"
+      },
+      {
+        "created_at": 1791749044,
+        "run_id": 20,
+        "kind": "spawned",
+        "payload": "{\"pid\": 56445, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|760428\"}"
+      },
+      {
+        "created_at": 1791749048,
+        "run_id": 20,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791749108,
+        "run_id": 20,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791749168,
+        "run_id": 20,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791749228,
+        "run_id": 20,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791749288,
+        "run_id": 20,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791749348,
+        "run_id": 20,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791749408,
+        "run_id": 20,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791749415,
+        "run_id": 20,
+        "kind": "completed",
+        "payload": "{\"result_len\": 0, \"summary\": \"T7 applied both items at candidate f3f17fe (evidence commit ac79b0e, local-only, no push). F1: public/app.js withGuard now re-renders the pane when it closes a mounted editor, so a discarded draft's form leaves the DOM and its listeners; a real-browser before/after probe (fresh scratch DBs, ports 4351 pre-fix / 4352 candidate) shows the bug pre-fix (stale form live, draft \\\"STALE EDIT\\\" savable into\"}"
+      },
+      {
+        "created_at": 1791749422,
+        "run_id": null,
+        "kind": "timed_out",
+        "payload": "{\"error\": \"Iteration budget exhausted (40/40) \u2014 task could not complete within the allowed iterations\", \"failures\": 1, \"retry_status\": \"ready\"}"
+      }
     ],
-    "comments": []
+    "runs": [
+      {
+        "id": 20,
+        "profile": "coder",
+        "status": "done",
+        "started_at": 1791749043,
+        "ended_at": 1791749415,
+        "outcome": "completed",
+        "summary": "T7 applied both items at candidate f3f17fe (evidence commit ac79b0e, local-only, no push). F1: public/app.js withGuard now re-renders the pane when it closes a mounted editor, so a discarded draft's form leaves the DOM and its listeners; a real-browser before/after probe (fresh scratch DBs, ports 4351 pre-fix / 4352 candidate) shows the bug pre-fix (stale form live, draft \"STALE EDIT\" savable into the note; a discarded new note's stale Save created a GHOST DRAFT row) and, post-fix, editorForms 0 + placeholder + nothing to save + unchanged note/stored values. F4: docs/SPEC.md \u00a76 test script reconciled to bare `node --test` with the reproduced Node 26.7.0 directory-argument failure. npm run check exit 0; npm test 25/25 exit 0; dirty Cancel, clean Cancel, Esc guard and a real save all still behave.",
+        "error": null
+      }
+    ]
   }
 }

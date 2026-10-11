@@ -1,0 +1,5 @@
+settings dialog trap: dialogOpen=true firstFocus=INPUT:"" containmentSequence=truetruetruetruetruetruetruetruetruetruetruetruetruetruetruetrue allInside=true
+delete dialog text: Delete this note? The note from Fri 2 Oct 2026 · 07:10 brewed with Hand grinder will be re
+delete confirm trap: dialogOpen=true firstFocus=BUTTON:"Keep note" containmentSequence=truetruetruetruetruetruetruetruetruetruetruetruetruetruetruetrue allInside=true
+failed detail fetch -> banner: {"hidden":false,"text":"That note could not be opened. The Coffee Notes server is not answering. Check that it is still running, then retry.\nRetry"} retryButtons= 1
+after Retry, pane: "FRI 2 OCT 2026 · 07:10 Peru San Ignacio Edit Delete BREW DAT"
