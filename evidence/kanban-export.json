@@ -1,0 +1,1125 @@
+{
+  "t_008fc7e9": {
+    "id": "t_008fc7e9",
+    "title": "T1 coder: scaffold repo + backend API/DB + tests",
+    "status": "done",
+    "assignee": "coder",
+    "created_at": 1791742059,
+    "started_at": 1791742119,
+    "completed_at": 1791743165,
+    "workspace_kind": "dir",
+    "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "goal_mode": 1,
+    "goal_max_turns": 14,
+    "max_runtime_seconds": 4200,
+    "result": "T1 backend verified at 6862eff; npm run check + npm test + live curl round-trip all pass; no source change needed.",
+    "last_failure_error": null,
+    "consecutive_failures": 0,
+    "events": [
+      {
+        "created_at": 1791742059,
+        "run_id": null,
+        "kind": "created",
+        "payload": "{\"assignee\": \"coder\", \"status\": \"ready\", \"parents\": [], \"creator_task_id\": null, \"tenant\": null, \"workspace_kind\": \"dir\", \"workspace_path\": \"/home/hermes/workspace/coffee-notes\", \"branch_name\": null, \"project_id\": null, \"skills\": [\"team-contract\", \"team-quality\", \"team-verify\"], \"goal_mode\": true, \"model_override\": null, \"provider_override\": null}"
+      },
+      {
+        "created_at": 1791742119,
+        "run_id": 4,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791743019, \"run_id\": 4}"
+      },
+      {
+        "created_at": 1791742119,
+        "run_id": 4,
+        "kind": "spawned",
+        "payload": "{\"pid\": 8154, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|67980\"}"
+      },
+      {
+        "created_at": 1791742130,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742189,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742249,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742310,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742370,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742432,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742492,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742562,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742622,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742683,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742744,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742811,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742871,
+        "run_id": 4,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791742908,
+        "run_id": 4,
+        "kind": "timed_out",
+        "payload": "{\"error\": \"Iteration budget exhausted (40/40) \u2014 task could not complete within the allowed iterations\", \"failures\": 1, \"retry_status\": \"ready\"}"
+      },
+      {
+        "created_at": 1791742961,
+        "run_id": 5,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791743861, \"run_id\": 5}"
+      },
+      {
+        "created_at": 1791742962,
+        "run_id": 5,
+        "kind": "spawned",
+        "payload": "{\"pid\": 14614, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|152212\"}"
+      },
+      {
+        "created_at": 1791742966,
+        "run_id": 5,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743025,
+        "run_id": 5,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743086,
+        "run_id": 5,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743145,
+        "run_id": 5,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743157,
+        "run_id": null,
+        "kind": "commented",
+        "payload": "{\"author\": \"coder\", \"len\": 2388}"
+      },
+      {
+        "created_at": 1791743165,
+        "run_id": 5,
+        "kind": "completed",
+        "payload": "{\"result_len\": 114, \"summary\": \"T1 backend is complete and re-verified at commit 6862eff (implementation 037135e, unchanged). I re-ran npm run check (exit 0), npm test (25/25 pass) and a full live curl round-trip against a running server on 127.0.0.1:4317 with a scratch DB \u2014 health, note/grinder CRUD, validation 400s, demo seed/clear, grinder-delete snapshot preservation, 404/405, static serving, graceful SIGTERM and restart per\"}"
+      }
+    ],
+    "runs": [
+      {
+        "id": 4,
+        "profile": "coder",
+        "status": "timed_out",
+        "started_at": 1791742119,
+        "ended_at": 1791742908,
+        "outcome": "timed_out",
+        "summary": null,
+        "error": "Iteration budget exhausted (40/40) \u2014 task could not complete within the allowed iterations"
+      },
+      {
+        "id": 5,
+        "profile": "coder",
+        "status": "done",
+        "started_at": 1791742961,
+        "ended_at": 1791743165,
+        "outcome": "completed",
+        "summary": "T1 backend is complete and re-verified at commit 6862eff (implementation 037135e, unchanged). I re-ran npm run check (exit 0), npm test (25/25 pass) and a full live curl round-trip against a running server on 127.0.0.1:4317 with a scratch DB \u2014 health, note/grinder CRUD, validation 400s, demo seed/clear, grinder-delete snapshot preservation, 404/405, static serving, graceful SIGTERM and restart persistence all behaved per docs/SPEC.md. No source change was required, so the existing receipt stays valid; my findings are on the card as a comment and completing this card releases the gated T2 child t_465f2318.",
+        "error": null
+      }
+    ],
+    "comments": []
+  },
+  "t_465f2318": {
+    "id": "t_465f2318",
+    "title": "T2 coder: frontend core \u2014 design system, history sidebar, detail and editor",
+    "status": "done",
+    "assignee": "coder",
+    "created_at": 1791742371,
+    "started_at": 1791743203,
+    "completed_at": 1791744043,
+    "workspace_kind": "dir",
+    "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "goal_mode": 1,
+    "goal_max_turns": 16,
+    "max_runtime_seconds": 5400,
+    "result": null,
+    "last_failure_error": null,
+    "consecutive_failures": 0,
+    "events": [
+      {
+        "created_at": 1791742371,
+        "run_id": null,
+        "kind": "created",
+        "payload": "{\"assignee\": \"coder\", \"status\": \"todo\", \"parents\": [\"t_008fc7e9\"], \"creator_task_id\": null, \"tenant\": null, \"workspace_kind\": \"dir\", \"workspace_path\": \"/home/hermes/workspace/coffee-notes\", \"branch_name\": null, \"project_id\": null, \"skills\": [\"team-contract\", \"team-quality\", \"team-verify\"], \"goal_mode\": true, \"model_override\": null, \"provider_override\": null}"
+      },
+      {
+        "created_at": 1791742371,
+        "run_id": null,
+        "kind": "dependency_wait",
+        "payload": "{\"reason\": \"parent_not_done\", \"parent\": \"t_008fc7e9\"}"
+      },
+      {
+        "created_at": 1791743166,
+        "run_id": null,
+        "kind": "promoted",
+        "payload": null
+      },
+      {
+        "created_at": 1791743203,
+        "run_id": 6,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791744103, \"run_id\": 6}"
+      },
+      {
+        "created_at": 1791743203,
+        "run_id": 6,
+        "kind": "spawned",
+        "payload": "{\"pid\": 16192, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|176336\"}"
+      },
+      {
+        "created_at": 1791743207,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743267,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743327,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743387,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743447,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743508,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743568,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743635,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743695,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743757,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743819,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743880,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791743943,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744004,
+        "run_id": 6,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744043,
+        "run_id": 6,
+        "kind": "completed",
+        "payload": "{\"result_len\": 0, \"summary\": \"T2 frontend core is complete at candidate commit 06e72b4 (receipt a8decff): one stylesheet with the SPEC \u00a75 warm tokens, a 340px history sidebar with an unmistakable selected state, the read-only detail view and the labelled editor with dirty guards, delete confirmation, skeletons, empty/filtered states and a retryable API-error banner, all built from ES modules under public/js/ with zero dependen\"}"
+      },
+      {
+        "created_at": 1791744051,
+        "run_id": null,
+        "kind": "timed_out",
+        "payload": "{\"error\": \"Iteration budget exhausted (40/40) \u2014 task could not complete within the allowed iterations\", \"failures\": 1, \"retry_status\": \"ready\"}"
+      }
+    ],
+    "runs": [
+      {
+        "id": 6,
+        "profile": "coder",
+        "status": "done",
+        "started_at": 1791743203,
+        "ended_at": 1791744043,
+        "outcome": "completed",
+        "summary": "T2 frontend core is complete at candidate commit 06e72b4 (receipt a8decff): one stylesheet with the SPEC \u00a75 warm tokens, a 340px history sidebar with an unmistakable selected state, the read-only detail view and the labelled editor with dirty guards, delete confirmation, skeletons, empty/filtered states and a retryable API-error banner, all built from ES modules under public/js/ with zero dependencies and no build step. Verified with npm run check (exit 0), npm test (25/25), a live curl round-trip where every shipped asset returned 200, and a throwaway Playwright/Chromium pass that exercised 50/51 assertions against the running app \u2014 the single failure was a race in the throwaway script's own assertion, not the app; it caught and I fixed one real bug (an untouched editor reported itself dirty). Settings-as-shell, the demo chip, the mobile drawer, Ctrl/Cmd+N and the a11y sweep are left to the gated T3 card, which this completion releases.",
+        "error": null
+      }
+    ],
+    "comments": []
+  },
+  "t_24b95f3b": {
+    "id": "t_24b95f3b",
+    "title": "T3 coder: settings, search, sample data, mobile drawer, accessibility polish",
+    "status": "done",
+    "assignee": "coder",
+    "created_at": 1791742387,
+    "started_at": 1791744045,
+    "completed_at": 1791745567,
+    "workspace_kind": "dir",
+    "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "goal_mode": 1,
+    "goal_max_turns": 16,
+    "max_runtime_seconds": 5400,
+    "result": null,
+    "last_failure_error": null,
+    "consecutive_failures": 0,
+    "events": [
+      {
+        "created_at": 1791742387,
+        "run_id": null,
+        "kind": "created",
+        "payload": "{\"assignee\": \"coder\", \"status\": \"todo\", \"parents\": [\"t_465f2318\"], \"creator_task_id\": null, \"tenant\": null, \"workspace_kind\": \"dir\", \"workspace_path\": \"/home/hermes/workspace/coffee-notes\", \"branch_name\": null, \"project_id\": null, \"skills\": [\"team-contract\", \"team-quality\", \"team-verify\"], \"goal_mode\": true, \"model_override\": null, \"provider_override\": null}"
+      },
+      {
+        "created_at": 1791742387,
+        "run_id": null,
+        "kind": "dependency_wait",
+        "payload": "{\"reason\": \"parent_not_done\", \"parent\": \"t_465f2318\"}"
+      },
+      {
+        "created_at": 1791744043,
+        "run_id": null,
+        "kind": "promoted",
+        "payload": null
+      },
+      {
+        "created_at": 1791744045,
+        "run_id": 7,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791744945, \"run_id\": 7}"
+      },
+      {
+        "created_at": 1791744045,
+        "run_id": 7,
+        "kind": "spawned",
+        "payload": "{\"pid\": 20764, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|260535\"}"
+      },
+      {
+        "created_at": 1791744105,
+        "run_id": 7,
+        "kind": "crashed",
+        "payload": "{\"pid\": 20764, \"claimer\": \"ai-sandbox:832\", \"exit_kind\": \"nonzero_exit\", \"exit_code\": 1, \"worker_output\": \"Hermes is at the active session limit (1/1). Held by: cli, oldest 14m ago. Try again when another session finishes.\", \"retry_status\": \"ready\"}"
+      },
+      {
+        "created_at": 1791744106,
+        "run_id": 8,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791745006, \"run_id\": 8}"
+      },
+      {
+        "created_at": 1791744106,
+        "run_id": 8,
+        "kind": "spawned",
+        "payload": "{\"pid\": 21167, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|266635\"}"
+      },
+      {
+        "created_at": 1791744110,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744170,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744230,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744290,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744350,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744412,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744477,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744537,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744597,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744657,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744723,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744783,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744843,
+        "run_id": 8,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791744884,
+        "run_id": 8,
+        "kind": "gave_up",
+        "payload": "{\"failures\": 2, \"effective_limit\": 2, \"limit_source\": \"dispatcher\", \"error\": \"Iteration budget exhausted (40/40) \u2014 task could not complete within the allowed iterations\", \"trigger_outcome\": \"timed_out\", \"retry_status\": \"ready\", \"budget_used\": 40, \"budget_max\": 40}"
+      },
+      {
+        "created_at": 1791745546,
+        "run_id": null,
+        "kind": "commented",
+        "payload": "{\"author\": \"default\", \"len\": 1925}"
+      },
+      {
+        "created_at": 1791745567,
+        "run_id": 10,
+        "kind": "completed",
+        "payload": "{\"result_len\": 0, \"summary\": \"T3 frontend completion delivered at b69a65e (settings dialog, sample data, mobile drawer, keyboard/a11y polish). Closed by the coordinator as an operator override after the coder's run exhausted its iteration budget: the implementation and receipt are committed and were independently probed. A real defect was found in grinder state refresh (add/rename/make-default) and is tracked separately in t_e\"}"
+      }
+    ],
+    "runs": [
+      {
+        "id": 7,
+        "profile": "coder",
+        "status": "crashed",
+        "started_at": 1791744045,
+        "ended_at": 1791744105,
+        "outcome": "crashed",
+        "summary": null,
+        "error": "pid 20764 exited with code 1 Worker's last output: 'Hermes is at the active session limit (1/1). Held by: cli, oldest 14m ago. Try again when another session finishes.'"
+      },
+      {
+        "id": 8,
+        "profile": "coder",
+        "status": "gave_up",
+        "started_at": 1791744106,
+        "ended_at": 1791744884,
+        "outcome": "gave_up",
+        "summary": null,
+        "error": "Iteration budget exhausted (40/40) \u2014 task could not complete within the allowed iterations"
+      },
+      {
+        "id": 10,
+        "profile": "coder",
+        "status": "completed",
+        "started_at": 1791745567,
+        "ended_at": 1791745567,
+        "outcome": "completed",
+        "summary": "T3 frontend completion delivered at b69a65e (settings dialog, sample data, mobile drawer, keyboard/a11y polish). Closed by the coordinator as an operator override after the coder's run exhausted its iteration budget: the implementation and receipt are committed and were independently probed. A real defect was found in grinder state refresh (add/rename/make-default) and is tracked separately in t_ea659a25.",
+        "error": null
+      }
+    ],
+    "comments": []
+  },
+  "t_5d0de379": {
+    "id": "t_5d0de379",
+    "title": "T4 tester: independent acceptance verification of the running app",
+    "status": "blocked",
+    "assignee": "tester",
+    "created_at": 1791742407,
+    "started_at": 1791745851,
+    "completed_at": null,
+    "workspace_kind": "dir",
+    "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "goal_mode": 1,
+    "goal_max_turns": 18,
+    "max_runtime_seconds": 5400,
+    "result": null,
+    "last_failure_error": "Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations",
+    "consecutive_failures": 2,
+    "events": [
+      {
+        "created_at": 1791742407,
+        "run_id": null,
+        "kind": "created",
+        "payload": "{\"assignee\": \"tester\", \"status\": \"todo\", \"parents\": [\"t_24b95f3b\"], \"creator_task_id\": null, \"tenant\": null, \"workspace_kind\": \"dir\", \"workspace_path\": \"/home/hermes/workspace/coffee-notes\", \"branch_name\": null, \"project_id\": null, \"skills\": [\"team-contract\", \"team-quality\", \"team-verify\", \"team-debug\"], \"goal_mode\": true, \"model_override\": null, \"provider_override\": null}"
+      },
+      {
+        "created_at": 1791742407,
+        "run_id": null,
+        "kind": "dependency_wait",
+        "payload": "{\"reason\": \"parent_not_done\", \"parent\": \"t_24b95f3b\"}"
+      },
+      {
+        "created_at": 1791745546,
+        "run_id": null,
+        "kind": "linked",
+        "payload": "{\"parent\": \"t_ea659a25\", \"child\": \"t_5d0de379\"}"
+      },
+      {
+        "created_at": 1791745835,
+        "run_id": null,
+        "kind": "promoted",
+        "payload": null
+      },
+      {
+        "created_at": 1791745851,
+        "run_id": 11,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791746751, \"run_id\": 11}"
+      },
+      {
+        "created_at": 1791745851,
+        "run_id": 11,
+        "kind": "spawned",
+        "payload": "{\"pid\": 31644, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|441163\"}"
+      },
+      {
+        "created_at": 1791745855,
+        "run_id": 11,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791745916,
+        "run_id": 11,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791745940,
+        "run_id": 11,
+        "kind": "heartbeat",
+        "payload": "{\"note\": \"checks+unit tests pass; test instance up on 127.0.0.1:4321 (4318 occupied by leftover coder process); starting Playwright acceptance sweep\"}"
+      },
+      {
+        "created_at": 1791745976,
+        "run_id": 11,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746036,
+        "run_id": 11,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746096,
+        "run_id": 11,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746156,
+        "run_id": 11,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746216,
+        "run_id": 11,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746276,
+        "run_id": 11,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746337,
+        "run_id": 11,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746403,
+        "run_id": 11,
+        "kind": "timed_out",
+        "payload": "{\"error\": \"Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations\", \"failures\": 1, \"retry_status\": \"ready\"}"
+      },
+      {
+        "created_at": 1791746453,
+        "run_id": 12,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791747353, \"run_id\": 12}"
+      },
+      {
+        "created_at": 1791746453,
+        "run_id": 12,
+        "kind": "spawned",
+        "payload": "{\"pid\": 35461, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|501344\"}"
+      },
+      {
+        "created_at": 1791746460,
+        "run_id": 12,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746521,
+        "run_id": 12,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746581,
+        "run_id": 12,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746641,
+        "run_id": 12,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746706,
+        "run_id": 12,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746766,
+        "run_id": 12,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746826,
+        "run_id": 12,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746852,
+        "run_id": 12,
+        "kind": "gave_up",
+        "payload": "{\"failures\": 2, \"effective_limit\": 2, \"limit_source\": \"dispatcher\", \"error\": \"Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations\", \"trigger_outcome\": \"timed_out\", \"retry_status\": \"ready\", \"budget_used\": 30, \"budget_max\": 30}"
+      }
+    ],
+    "runs": [
+      {
+        "id": 11,
+        "profile": "tester",
+        "status": "timed_out",
+        "started_at": 1791745851,
+        "ended_at": 1791746403,
+        "outcome": "timed_out",
+        "summary": null,
+        "error": "Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations"
+      },
+      {
+        "id": 12,
+        "profile": "tester",
+        "status": "gave_up",
+        "started_at": 1791746453,
+        "ended_at": 1791746852,
+        "outcome": "gave_up",
+        "summary": null,
+        "error": "Iteration budget exhausted (30/30) \u2014 task could not complete within the allowed iterations"
+      }
+    ],
+    "comments": []
+  },
+  "t_8fc61842": {
+    "id": "t_8fc61842",
+    "title": "T5 reviewer: independent diff review and complexity assessment",
+    "status": "todo",
+    "assignee": "reviewer",
+    "created_at": 1791744081,
+    "started_at": null,
+    "completed_at": null,
+    "workspace_kind": "dir",
+    "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "goal_mode": 1,
+    "goal_max_turns": 16,
+    "max_runtime_seconds": 4200,
+    "result": null,
+    "last_failure_error": null,
+    "consecutive_failures": 0,
+    "events": [
+      {
+        "created_at": 1791744081,
+        "run_id": null,
+        "kind": "created",
+        "payload": "{\"assignee\": \"reviewer\", \"status\": \"todo\", \"parents\": [\"t_5d0de379\"], \"creator_task_id\": null, \"tenant\": null, \"workspace_kind\": \"dir\", \"workspace_path\": \"/home/hermes/workspace/coffee-notes\", \"branch_name\": null, \"project_id\": null, \"skills\": [\"team-contract\", \"team-quality\", \"team-verify\"], \"goal_mode\": true, \"model_override\": null, \"provider_override\": null}"
+      },
+      {
+        "created_at": 1791744081,
+        "run_id": null,
+        "kind": "dependency_wait",
+        "payload": "{\"reason\": \"parent_not_done\", \"parent\": \"t_5d0de379\"}"
+      },
+      {
+        "created_at": 1791746538,
+        "run_id": null,
+        "kind": "linked",
+        "payload": "{\"parent\": \"t_a1c985a8\", \"child\": \"t_8fc61842\"}"
+      }
+    ],
+    "runs": [],
+    "comments": []
+  },
+  "t_ea659a25": {
+    "id": "t_ea659a25",
+    "title": "T3b coder: fix stale grinder state in Settings (add/rename/make-default never refresh)",
+    "status": "done",
+    "assignee": "coder",
+    "created_at": 1791745536,
+    "started_at": 1791745550,
+    "completed_at": 1791745835,
+    "workspace_kind": "dir",
+    "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "goal_mode": 1,
+    "goal_max_turns": 10,
+    "max_runtime_seconds": 3000,
+    "result": null,
+    "last_failure_error": null,
+    "consecutive_failures": 0,
+    "events": [
+      {
+        "created_at": 1791745536,
+        "run_id": null,
+        "kind": "created",
+        "payload": "{\"assignee\": \"coder\", \"status\": \"ready\", \"parents\": [], \"creator_task_id\": null, \"tenant\": null, \"workspace_kind\": \"dir\", \"workspace_path\": \"/home/hermes/workspace/coffee-notes\", \"branch_name\": null, \"project_id\": null, \"skills\": [\"team-contract\", \"team-quality\", \"team-verify\"], \"goal_mode\": true, \"model_override\": null, \"provider_override\": null}"
+      },
+      {
+        "created_at": 1791745550,
+        "run_id": 9,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791746450, \"run_id\": 9}"
+      },
+      {
+        "created_at": 1791745550,
+        "run_id": 9,
+        "kind": "spawned",
+        "payload": "{\"pid\": 29305, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|411075\"}"
+      },
+      {
+        "created_at": 1791745557,
+        "run_id": 9,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791745619,
+        "run_id": 9,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791745682,
+        "run_id": 9,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791745744,
+        "run_id": 9,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791745804,
+        "run_id": 9,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791745835,
+        "run_id": 9,
+        "kind": "completed",
+        "payload": "{\"result_len\": 0, \"summary\": \"Fixed the stale grinder state in Settings: public/app.js now routes add/rename/makeDefault through a mutateGrinder() helper that awaits loadGrinders() before the dialog re-renders (matching remove). Candidate 4f982fe; receipt 88f6660. npm run check and npm test pass (25/25), and a Playwright/Chromium repro against a fresh empty DB goes from 4/15 to 15/15 checks (before: added presets never rendere\", \"artifacts\": [\"/home/hermes/workspace/coffee-notes/evidence/receipts/T3b-coder.md\"]}"
+      }
+    ],
+    "runs": [
+      {
+        "id": 9,
+        "profile": "coder",
+        "status": "done",
+        "started_at": 1791745550,
+        "ended_at": 1791745835,
+        "outcome": "completed",
+        "summary": "Fixed the stale grinder state in Settings: public/app.js now routes add/rename/makeDefault through a mutateGrinder() helper that awaits loadGrinders() before the dialog re-renders (matching remove). Candidate 4f982fe; receipt 88f6660. npm run check and npm test pass (25/25), and a Playwright/Chromium repro against a fresh empty DB goes from 4/15 to 15/15 checks (before: added presets never rendered, no row actions reachable).",
+        "error": null
+      }
+    ],
+    "comments": []
+  },
+  "t_22570dcc": {
+    "id": "t_22570dcc",
+    "title": "T6 coder: fix detail-load error feedback and dialog focus traps",
+    "status": "done",
+    "assignee": "coder",
+    "created_at": 1791746511,
+    "started_at": 1791746874,
+    "completed_at": 1791747675,
+    "workspace_kind": "dir",
+    "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "goal_mode": 1,
+    "goal_max_turns": 12,
+    "max_runtime_seconds": 3600,
+    "result": null,
+    "last_failure_error": null,
+    "consecutive_failures": 0,
+    "events": [
+      {
+        "created_at": 1791746511,
+        "run_id": null,
+        "kind": "created",
+        "payload": "{\"assignee\": \"coder\", \"status\": \"ready\", \"parents\": [], \"creator_task_id\": null, \"tenant\": null, \"workspace_kind\": \"dir\", \"workspace_path\": \"/home/hermes/workspace/coffee-notes\", \"branch_name\": null, \"project_id\": null, \"skills\": [\"team-contract\", \"team-quality\", \"team-verify\"], \"goal_mode\": true, \"model_override\": null, \"provider_override\": null}"
+      },
+      {
+        "created_at": 1791746874,
+        "run_id": 13,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791747774, \"run_id\": 13}"
+      },
+      {
+        "created_at": 1791746875,
+        "run_id": 13,
+        "kind": "spawned",
+        "payload": "{\"pid\": 38984, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|543510\"}"
+      },
+      {
+        "created_at": 1791746879,
+        "run_id": 13,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791746940,
+        "run_id": 13,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747000,
+        "run_id": 13,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747060,
+        "run_id": 13,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747120,
+        "run_id": 13,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747186,
+        "run_id": 13,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747247,
+        "run_id": 13,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747308,
+        "run_id": 13,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747338,
+        "run_id": 13,
+        "kind": "timed_out",
+        "payload": "{\"error\": \"Iteration budget exhausted (40/40) \u2014 task could not complete within the allowed iterations\", \"failures\": 1, \"retry_status\": \"ready\"}"
+      },
+      {
+        "created_at": 1791747356,
+        "run_id": 14,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791748256, \"run_id\": 14}"
+      },
+      {
+        "created_at": 1791747356,
+        "run_id": 14,
+        "kind": "spawned",
+        "payload": "{\"pid\": 42166, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|591685\"}"
+      },
+      {
+        "created_at": 1791747360,
+        "run_id": 14,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747421,
+        "run_id": 14,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747483,
+        "run_id": 14,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747544,
+        "run_id": 14,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747604,
+        "run_id": 14,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747665,
+        "run_id": 14,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747675,
+        "run_id": 14,
+        "kind": "completed",
+        "payload": "{\"result_len\": 0, \"summary\": \"Fixed all three Coffee Notes defects at candidate c1222f9 (public/app.js + public/js/dialog.js, 46 insertions). selectNote no longer skips a re-read, so a failed detail load raises the shared banner + Retry and clears the stale pane; dialog.js gained a small, per-keypress focusable scan + Tab wrap plus explicit initial focus, so both dialogs take and hold focus and return it to their opener. npm r\"}"
+      }
+    ],
+    "runs": [
+      {
+        "id": 13,
+        "profile": "coder",
+        "status": "timed_out",
+        "started_at": 1791746874,
+        "ended_at": 1791747338,
+        "outcome": "timed_out",
+        "summary": null,
+        "error": "Iteration budget exhausted (40/40) \u2014 task could not complete within the allowed iterations"
+      },
+      {
+        "id": 14,
+        "profile": "coder",
+        "status": "done",
+        "started_at": 1791747356,
+        "ended_at": 1791747675,
+        "outcome": "completed",
+        "summary": "Fixed all three Coffee Notes defects at candidate c1222f9 (public/app.js + public/js/dialog.js, 46 insertions). selectNote no longer skips a re-read, so a failed detail load raises the shared banner + Retry and clears the stale pane; dialog.js gained a small, per-keypress focusable scan + Tab wrap plus explicit initial focus, so both dialogs take and hold focus and return it to their opener. npm run check exit 0 and npm test 25/25 pass; all three repros re-run in real Chromium before/after on scratch DBs (ports 4351/4352). Receipt at evidence/receipts/T6-coder.md.",
+        "error": null
+      }
+    ],
+    "comments": []
+  },
+  "t_a1c985a8": {
+    "id": "t_a1c985a8",
+    "title": "T4b tester: re-verify acceptance after the T6 fix (focused)",
+    "status": "running",
+    "assignee": "tester",
+    "created_at": 1791746526,
+    "started_at": 1791747718,
+    "completed_at": null,
+    "workspace_kind": "dir",
+    "workspace_path": "/home/hermes/workspace/coffee-notes",
+    "goal_mode": 1,
+    "goal_max_turns": 14,
+    "max_runtime_seconds": 4200,
+    "result": null,
+    "last_failure_error": null,
+    "consecutive_failures": 0,
+    "events": [
+      {
+        "created_at": 1791746526,
+        "run_id": null,
+        "kind": "created",
+        "payload": "{\"assignee\": \"tester\", \"status\": \"todo\", \"parents\": [\"t_22570dcc\"], \"creator_task_id\": null, \"tenant\": null, \"workspace_kind\": \"dir\", \"workspace_path\": \"/home/hermes/workspace/coffee-notes\", \"branch_name\": null, \"project_id\": null, \"skills\": [\"team-contract\", \"team-quality\", \"team-verify\", \"team-debug\"], \"goal_mode\": true, \"model_override\": null, \"provider_override\": null}"
+      },
+      {
+        "created_at": 1791746526,
+        "run_id": null,
+        "kind": "dependency_wait",
+        "payload": "{\"reason\": \"parent_not_done\", \"parent\": \"t_22570dcc\"}"
+      },
+      {
+        "created_at": 1791747675,
+        "run_id": null,
+        "kind": "promoted",
+        "payload": null
+      },
+      {
+        "created_at": 1791747718,
+        "run_id": 15,
+        "kind": "claimed",
+        "payload": "{\"lock\": \"ai-sandbox:832\", \"expires\": 1791748618, \"run_id\": 15}"
+      },
+      {
+        "created_at": 1791747718,
+        "run_id": 15,
+        "kind": "spawned",
+        "payload": "{\"pid\": 44919, \"started_at\": \"8bf576e4-9885-4674-98b5-6f4bb7d3f1f4:4|627838\"}"
+      },
+      {
+        "created_at": 1791747722,
+        "run_id": 15,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747783,
+        "run_id": 15,
+        "kind": "heartbeat",
+        "payload": null
+      },
+      {
+        "created_at": 1791747844,
+        "run_id": 15,
+        "kind": "heartbeat",
+        "payload": null
+      }
+    ],
+    "runs": [
+      {
+        "id": 15,
+        "profile": "tester",
+        "status": "running",
+        "started_at": 1791747718,
+        "ended_at": null,
+        "outcome": null,
+        "summary": null,
+        "error": null
+      }
+    ],
+    "comments": []
+  }
+}
