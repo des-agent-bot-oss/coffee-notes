@@ -3,8 +3,9 @@
 - Task: `t_008fc7e9` (T1 coder, Coffee Notes), local-only completion.
 - Candidate commit (implementation): `037135e0a9bf6b71300c71f3da435af44541c4cf`
   (`feat(t1): SQLite store, HTTP API, tests and operations doc`, branch `main`,
-  parent `53ca555`). This receipt is added in the following evidence-only commit;
-  no source file changed after the checks below.
+  parent `a7c465d`; HEAD was `53ca555` when this task started). This receipt is
+  added in the following evidence-only commit; no source file changed after the
+  checks below.
 - Environment: Linux VM, Node `v26.7.0`, npm `11.19.0`, `node:sqlite` built in.
   No runtime dependencies, no browser/network involvement.
 - Scope delivered: `package.json`, `server/{schema.sql,db.js,router.js,api.js,static.js,index.js,seed.js}`,
