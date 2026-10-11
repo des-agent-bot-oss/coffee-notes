@@ -8,8 +8,10 @@ import { api } from './js/api.js';
 import { renderDetail, renderIdlePane, renderPaneSkeleton } from './js/detail.js';
 import { confirmDiscard, openDialog } from './js/dialog.js';
 import { el } from './js/dom.js';
+import { createDrawer } from './js/drawer.js';
 import { createEditor } from './js/editor.js';
 import { formatBrewedAt, noteCountLabel } from './js/format.js';
+import { createSettings } from './js/settings.js';
 import { renderHistory } from './js/sidebar.js';
 import { toast } from './js/toast.js';
 
@@ -17,10 +19,17 @@ const SEARCH_DEBOUNCE = 200;
 
 const dom = {
   banner: document.getElementById('banner'),
+  header: document.getElementById('app-header'),
   history: document.getElementById('history'),
   historyCount: document.getElementById('history-count'),
-  pane: document.getElementById('pane-content'),
+  notesButton: document.getElementById('notes-button'),
+  pane: document.getElementById('pane'),
+  paneContent: document.getElementById('pane-content'),
   search: document.getElementById('search-input'),
+  searchClear: document.getElementById('search-clear'),
+  backdrop: document.getElementById('drawer-backdrop'),
+  sidebar: document.getElementById('sidebar'),
+  skipLink: document.getElementById('skip-link'),
   newNote: document.getElementById('new-note-button'),
   settings: document.getElementById('settings-button')
 };
@@ -33,6 +42,7 @@ const state = {
   grindersLoaded: false,
   grindersUnavailable: false,
   defaultGrinderId: null,
+  samplesLoaded: false,
   query: '',
   selectedId: null,
   note: null,
@@ -46,6 +56,9 @@ const state = {
 
 // Load failures the user can retry, keyed so a newer success clears only its own.
 const errors = new Map();
+
+// The settings component lives only while its dialog is open.
+let settings = null;
 
 // --- rendering ---------------------------------------------------------------
 
@@ -78,21 +91,22 @@ function renderSidebar() {
     selectedId: state.selectedId,
     onSelect: selectNote,
     onNewNote: startNewNote,
-    onClearSearch: clearSearch
+    onClearSearch: clearSearch,
+    onLoadSamples: loadSamples
   });
 }
 
 function renderPane() {
   if (state.pane === 'editor' && state.editor) {
-    dom.pane.replaceChildren(state.editor.node);
+    dom.paneContent.replaceChildren(state.editor.node);
   } else if (state.pane === 'detail' && state.note) {
-    dom.pane.replaceChildren(
+    dom.paneContent.replaceChildren(
       renderDetail({ note: state.note, onEdit: startEdit, onDelete: deleteNote })
     );
   } else if (state.pane === 'loading') {
-    dom.pane.replaceChildren(renderPaneSkeleton());
+    dom.paneContent.replaceChildren(renderPaneSkeleton());
   } else {
-    dom.pane.replaceChildren(renderIdlePane({ hasNotes: state.notes.length > 0 }));
+    dom.paneContent.replaceChildren(renderIdlePane({ hasNotes: state.notes.length > 0 }));
   }
 }
 
@@ -113,6 +127,11 @@ async function loadNotes() {
     const payload = await api.listNotes(notesQuery());
     if (seq !== state.notesSeq) return; // a newer search already answered
     state.notes = payload?.notes ?? [];
+    if (!state.query.trim()) {
+      // An unfiltered list is the only place that shows whether sample data is
+      // present, which gates the seed action so it can never run twice.
+      state.samplesLoaded = state.notes.some((note) => note.is_demo);
+    }
     state.notesLoaded = true;
     state.notesLoading = false;
     clearError('notes');
@@ -175,6 +194,20 @@ async function retry() {
   if (keys.includes('notes')) await loadNotes();
   if (keys.includes('grinders')) await loadGrinders();
   if (keys.includes('note') && state.selectedId !== null) await loadDetail(state.selectedId);
+  if (settings) settings.refresh();
+}
+
+// --- mobile drawer -----------------------------------------------------------
+
+const drawer = createDrawer({
+  panel: dom.sidebar,
+  backdrop: dom.backdrop,
+  opener: dom.notesButton,
+  background: [dom.skipLink, dom.header, dom.banner, dom.pane]
+});
+
+function closeDrawer() {
+  drawer.close();
 }
 
 // --- unsaved-changes guard ---------------------------------------------------
@@ -200,6 +233,9 @@ async function withGuard(action, message) {
 
 function selectNote(id) {
   if (id === state.selectedId && state.pane === 'detail') return;
+  // Choosing a note is the drawer's purpose: close it before anything else so a
+  // discard prompt can never open behind its focus trap.
+  closeDrawer();
   withGuard(async () => {
     state.selectedId = id;
     state.previousSelection = null;
@@ -209,6 +245,7 @@ function selectNote(id) {
 }
 
 function startNewNote() {
+  closeDrawer();
   withGuard(async () => {
     state.previousSelection = state.selectedId;
     state.selectedId = null;
@@ -285,6 +322,7 @@ async function saveNote(payload, { isNew, id }) {
     // A brand-new note is not necessarily a search hit; show the full history.
     state.query = '';
     dom.search.value = '';
+    syncSearchClear();
   }
 
   renderPane();
@@ -330,12 +368,17 @@ async function deleteNote() {
   }
 }
 
-// --- search and settings -----------------------------------------------------
+// --- search ------------------------------------------------------------------
 
 let searchTimer = null;
 
+function syncSearchClear() {
+  dom.searchClear.hidden = dom.search.value.trim() === '';
+}
+
 function onSearchInput() {
   state.query = dom.search.value;
+  syncSearchClear();
   clearTimeout(searchTimer);
   searchTimer = setTimeout(() => loadNotes(), SEARCH_DEBOUNCE);
 }
@@ -344,54 +387,141 @@ function clearSearch() {
   clearTimeout(searchTimer);
   dom.search.value = '';
   state.query = '';
+  syncSearchClear();
   loadNotes();
 }
 
+// --- settings ----------------------------------------------------------------
+
 function openSettings() {
-  return withGuard(
-    () => showSettings(),
-    'Opening settings discards the changes you have not saved yet.'
+  closeDrawer();
+  return withGuard(() => showSettings(), 'Opening settings discards the changes you have not saved yet.');
+}
+
+function settingsSnapshot() {
+  return {
+    grinders: state.grinders,
+    defaultId: state.defaultGrinderId,
+    samplesLoaded: state.samplesLoaded,
+    unavailable: state.grindersUnavailable
+  };
+}
+
+async function showSettings() {
+  settings = createSettings({
+    snapshot: settingsSnapshot,
+    actions: {
+      add: (name) => api.createGrinder(name).then((payload) => payload.grinder),
+      rename: (id, name) => api.renameGrinder(id, name).then((payload) => payload.grinder),
+      makeDefault: (id) => api.setDefaultGrinder(id).then((payload) => payload.grinder),
+      remove: async (id) => {
+        const payload = await api.deleteGrinder(id);
+        await loadGrinders();
+        // A note that used the removed preset now has no grinder_id; re-read it
+        // so the editor offers the stored grinder name instead of a dead id.
+        if (state.pane === 'detail' && state.selectedId !== null) await loadDetail(state.selectedId);
+        return payload;
+      },
+      seed: async () => {
+        const payload = await api.seedDemo();
+        await loadNotes();
+        await loadGrinders();
+        return payload.created;
+      },
+      clearDemo: async () => {
+        const payload = await api.clearDemo();
+        await loadNotes();
+        await loadGrinders();
+        if (state.selectedId !== null && !state.notes.some((item) => item.id === state.selectedId)) {
+          state.selectedId = null;
+          state.note = null;
+          state.pane = 'idle';
+          renderSidebar();
+          renderPane();
+        }
+        return payload.removed;
+      }
+    }
+  });
+
+  try {
+    await openDialog({
+      title: 'Grinder settings',
+      description: 'Grinder presets fill in the grinder field when you record a new note. Removing one never changes a saved note.',
+      body: settings.node,
+      actions: [{ label: 'Close', value: 'close', variant: 'ghost' }]
+    });
+  } finally {
+    settings = null;
+  }
+}
+
+/** Load the sample notes from the empty history state. */
+async function loadSamples() {
+  if (state.samplesLoaded) {
+    toast('Sample notes are already loaded.', 'error');
+    return;
+  }
+  try {
+    const payload = await api.seedDemo();
+    toast(`${payload?.created ?? 'Sample'} sample notes loaded.`);
+  } catch (error) {
+    toast(`Sample notes could not be loaded. ${error.message}`, 'error');
+    return;
+  }
+  await loadNotes();
+  await loadGrinders();
+  if (settings) settings.refresh();
+}
+
+// --- keyboard ----------------------------------------------------------------
+
+const TYPING_TAGS = new Set(['INPUT', 'TEXTAREA', 'SELECT']);
+
+function isTypingTarget(target) {
+  return (
+    target instanceof HTMLElement && (TYPING_TAGS.has(target.tagName) || target.isContentEditable)
   );
 }
 
-function showSettings() {
-  const body = el('div', { class: 'settings' });
-  if (state.grinders.length === 0) {
-    body.append(
-      el('p', {
-        class: 'settings__empty',
-        text: state.grindersUnavailable
-          ? 'Grinder presets could not be loaded.'
-          : 'No grinder presets yet. Until you add one, a note keeps whatever grinder name you type.'
-      })
-    );
-  } else {
-    const list = el('ul', { class: 'grinder-list' });
-    for (const grinder of state.grinders) {
-      list.append(
-        el('li', { class: 'grinder-list__item' }, [
-          el('span', { class: 'grinder-list__name', text: grinder.name }),
-          grinder.is_default ? el('span', { class: 'badge', text: 'Default' }) : null,
-          el('span', { class: 'grinder-list__count', text: noteCountLabel(grinder.note_count) })
-        ])
-      );
-    }
-    body.append(list);
+function dialogOpen() {
+  return document.querySelector('dialog[open]') !== null;
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'n' || event.key === 'N') {
+    // Ctrl/Cmd+N: only take the shortcut when it is unambiguous. While a dialog
+    // is open, or while the user is typing, the browser keeps its own binding.
+    if (!(event.ctrlKey || event.metaKey) || event.altKey || event.shiftKey) return;
+    if (dialogOpen() || isTypingTarget(event.target)) return;
+    event.preventDefault();
+    startNewNote();
+    return;
   }
 
-  return openDialog({
-    title: 'Settings',
-    description: 'Grinder presets fill in the grinder field when you record a new note.',
-    body,
-    actions: [{ label: 'Close', value: 'close', variant: 'ghost' }]
-  });
-}
+  if (event.key !== 'Escape') return;
+  if (dialogOpen()) return; // the dialog owns its own Esc
+  if (drawer.isOpen()) {
+    drawer.close();
+    return;
+  }
+  if (state.pane !== 'editor') return;
+  event.preventDefault();
+  cancelEdit();
+});
+
+window.addEventListener('beforeunload', (event) => {
+  if (!isDirty()) return;
+  event.preventDefault();
+  event.returnValue = '';
+});
 
 // --- start-up ----------------------------------------------------------------
 
 async function boot() {
   renderSidebar();
   renderPane();
+  syncSearchClear();
   await Promise.all([loadNotes(), loadGrinders()]);
 
   if (state.selectedId === null && state.notes.length > 0) {
@@ -407,19 +537,6 @@ async function boot() {
 dom.newNote.addEventListener('click', () => startNewNote());
 dom.settings.addEventListener('click', () => openSettings());
 dom.search.addEventListener('input', onSearchInput);
-
-document.addEventListener('keydown', (event) => {
-  if (event.key !== 'Escape') return;
-  if (document.querySelector('dialog[open]')) return; // the dialog owns its own Esc
-  if (state.pane !== 'editor') return;
-  event.preventDefault();
-  cancelEdit();
-});
-
-window.addEventListener('beforeunload', (event) => {
-  if (!isDirty()) return;
-  event.preventDefault();
-  event.returnValue = '';
-});
+dom.searchClear.addEventListener('click', clearSearch);
 
 boot();

@@ -18,7 +18,13 @@ export function renderDetail({ note, onEdit, onDelete }) {
     el('header', { class: 'pane-header' }, [
       el('div', { class: 'pane-header__titles' }, [
         el('p', { class: 'pane-header__eyebrow', text: formatBrewedAt(note.brewed_at) }),
-        el('h2', { class: 'pane-header__title', text: note.bean_name || 'Brew note' })
+        el('h2', { class: 'pane-header__title', text: note.bean_name || 'Brew note' }),
+        note.is_demo
+          ? el('p', { class: 'pane-header__sample' }, [
+              el('span', { class: 'chip chip--sample', text: 'Sample' }),
+              ' Sample data — remove it from Settings when you are done with it.'
+            ])
+          : null
       ]),
       el('div', { class: 'pane-header__actions' }, [
         el('button', { type: 'button', class: 'btn btn--ghost btn--small', text: 'Edit', onclick: () => onEdit() }),

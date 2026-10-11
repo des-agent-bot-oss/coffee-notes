@@ -34,6 +34,7 @@ function row(note, { selected, onSelect }) {
         el('span', { class: 'note-row__grinder', text: note.grinder_name }),
         el('span', { class: 'note-row__bean', text: ` · ${note.bean_name || EMPTY}` })
       ]),
+      note.is_demo ? el('span', { class: 'chip chip--sample', text: 'Sample' }) : null,
       note.grind_size === null || note.grind_size === undefined
         ? null
         : el('span', { class: 'chip chip--grind', text: `Grind ${note.grind_size}` })
@@ -42,7 +43,10 @@ function row(note, { selected, onSelect }) {
   return el('li', {}, [button]);
 }
 
-export function renderHistory(host, { notes, loading, error, query, selectedId, onSelect, onNewNote, onClearSearch }) {
+export function renderHistory(
+  host,
+  { notes, loading, error, query, selectedId, onSelect, onNewNote, onClearSearch, onLoadSamples }
+) {
   clear(host);
   host.setAttribute('aria-busy', loading ? 'true' : 'false');
 
@@ -81,7 +85,17 @@ export function renderHistory(host, { notes, loading, error, query, selectedId, 
           class: 'empty__text',
           text: 'Record a brew and it will appear here, newest first — with the grinder, beans and grind size you used.'
         }),
-        el('button', { type: 'button', class: 'btn btn--primary', text: 'New note', onclick: () => onNewNote() })
+        el('div', { class: 'empty__actions' }, [
+          el('button', { type: 'button', class: 'btn btn--primary', text: 'New note', onclick: () => onNewNote() }),
+          onLoadSamples
+            ? el('button', {
+                type: 'button',
+                class: 'btn btn--ghost',
+                text: 'Load sample notes',
+                onclick: () => onLoadSamples()
+              })
+            : null
+        ])
       ])
     );
     return;

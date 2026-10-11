@@ -54,5 +54,12 @@ export const api = {
   createNote: (payload) => request('/api/notes', { method: 'POST', body: payload }),
   updateNote: (id, payload) => request(`/api/notes/${id}`, { method: 'PUT', body: payload }),
   deleteNote: (id) => request(`/api/notes/${id}`, { method: 'DELETE' }),
-  listGrinders: () => request('/api/grinders')
+  listGrinders: () => request('/api/grinders'),
+  createGrinder: (name) => request('/api/grinders', { method: 'POST', body: { name } }),
+  renameGrinder: (id, name) => request(`/api/grinders/${id}`, { method: 'PATCH', body: { name } }),
+  setDefaultGrinder: (id) =>
+    request(`/api/grinders/${id}`, { method: 'PATCH', body: { is_default: true } }),
+  deleteGrinder: (id) => request(`/api/grinders/${id}`, { method: 'DELETE' }),
+  seedDemo: () => request('/api/demo/seed', { method: 'POST' }),
+  clearDemo: () => request('/api/demo', { method: 'DELETE' })
 };

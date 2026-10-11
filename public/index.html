@@ -9,13 +9,25 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="app">
-      <header class="app-header">
+    <a class="skip-link" href="#pane-content" id="skip-link">Skip to note content</a>
+
+    <div class="app" id="app">
+      <header class="app-header" id="app-header">
         <div class="app-header__brand">
           <p class="app-header__eyebrow">Brewing journal</p>
           <h1 class="app-header__title">Coffee Notes</h1>
         </div>
         <div class="app-header__actions">
+          <button
+            type="button"
+            class="btn btn--ghost"
+            id="notes-button"
+            aria-controls="sidebar"
+            aria-expanded="false"
+            hidden
+          >
+            Notes
+          </button>
           <button type="button" class="btn btn--ghost" id="settings-button">Settings</button>
           <button type="button" class="btn btn--primary" id="new-note-button">New note</button>
         </div>
@@ -23,16 +35,21 @@
 
       <div class="banner" id="banner" role="alert" hidden></div>
 
-      <aside class="sidebar" aria-label="Note history">
+      <aside class="sidebar" id="sidebar" aria-label="Note history">
         <div class="sidebar__head">
-          <label class="sr-only" for="search-input">Search notes</label>
-          <input
-            type="search"
-            id="search-input"
-            class="input input--search"
-            placeholder="Search beans, grinders, notes"
-            autocomplete="off"
-          />
+          <div class="search">
+            <label class="sr-only" for="search-input">Search notes</label>
+            <input
+              type="search"
+              id="search-input"
+              class="input input--search"
+              placeholder="Search beans, grinders, notes"
+              autocomplete="off"
+            />
+            <button type="button" class="link-button search__clear" id="search-clear" hidden>
+              Clear
+            </button>
+          </div>
           <p class="sidebar__count" id="history-count"></p>
         </div>
         <nav class="history" id="history" aria-label="Saved notes"></nav>
@@ -43,6 +60,7 @@
       </main>
     </div>
 
+    <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
     <div class="toast-region" id="toast-region" aria-live="polite"></div>
     <div id="dialog-root"></div>
 
