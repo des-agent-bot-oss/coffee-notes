@@ -50,15 +50,21 @@ def main() -> int:
         "Regenerate with scripts/fetch-fonts.py. */"
     ]
     written = 0
+    index = 0
     for block in blocks:
-        subset = (re.search(r"/\*\s*([a-z\-]+)\s*\*/", block) or [None, "latin"])[1]
-        if subset not in KEEP:
-            continue
+        # Google's stylesheet emits one block per unicode subset with the subset name in a
+        # leading comment; that comment is not reliably adjacent, so keep every kept block and
+        # name the files by order instead of by comment.
         url = re.search(r"url\((https://[^)]+\.woff2)\)", block)
         if not url:
             continue
+        # Keep only the basic-latin (U+0000-00FF) and latin-ext (U+0100-…) subsets; the rest of
+        # the world's glyph coverage is dead weight for this app.
+        if "U+0000-00FF" not in block and "U+0100" not in block:
+            continue
+        index += 1
         src = url.group(1)
-        name = f"dm-sans-{subset}.woff2"
+        name = f"dm-sans-{index}.woff2"
         try:
             data = fetch(src)
         except Exception as exc:  # noqa: BLE001
