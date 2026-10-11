@@ -224,7 +224,12 @@ function closeEditor() {
 /** Run an in-app navigation, asking before unsaved edits are discarded. */
 async function withGuard(action, message) {
   if (isDirty() && !(await confirmDiscard(message))) return false;
+  const wasEditing = state.pane === 'editor';
   closeEditor();
+  // Drop the editor node together with the state that backed it: while it stays
+  // mounted in the pane its listeners keep accepting input — and a save — for a
+  // draft the user has just discarded.
+  if (wasEditing) renderPane();
   await action();
   return true;
 }

@@ -100,10 +100,11 @@ Font: `font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, san
 ```
 start   node server/index.js
 dev     COFFEE_NOTES_PORT=4317 node --watch server/index.js
-test    node --test test/
+test    node --test
 seed    node server/seed.js --demo        (CLI equivalent of POST /api/demo/seed)
 check   node scripts/check.js             (see below)
 ```
+`npm test` runs the suite with a bare `node --test` (built-in discovery of `test/**/*.test.js`). Do not pass the directory positionally: on Node 26.7.0 `node --test test/` exits 1 with `Cannot find module '…/test'`, i.e. the argument is resolved as a module entry point rather than a test path.
 `npm run check` must: syntax-check every `.js` file under `server/`, `public/`, `test/`, `scripts/` via `node --check` (ESM-safe, run per file with `--input-type=module` fallback), validate `package.json`/JSON files parse, assert every file listed in §2 exists, assert `public/index.html` references the CSS+JS assets, and assert no `node_modules` import appears in runtime files. Exit non-zero on any failure with an itemised report. This is the project "build/type check".
 
 ## 7. HTTP API (JSON, `Content-Type: application/json`)
