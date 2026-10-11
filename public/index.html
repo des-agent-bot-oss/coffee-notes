@@ -4,54 +4,48 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Coffee Notes</title>
+    <meta name="description" content="A local brewing and tasting journal." />
     <link rel="stylesheet" href="./fonts/dm-sans.css" />
     <link rel="stylesheet" href="./styles.css" />
-    <style>
-      /* Consumes the design tokens defined in styles.css (fresh in T1, so the
-         page still renders sensibly if that file is missing). */
-      header {
-        border-bottom: 1px solid var(--line, #e4d8c6);
-        padding-bottom: 1rem;
-        margin-bottom: 1.5rem;
-      }
-      .eyebrow {
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        font-size: 0.75rem;
-        color: var(--muted, #8a7461);
-      }
-      .status {
-        margin-top: 1rem;
-        font-size: 0.9rem;
-        color: var(--muted, #8a7461);
-      }
-      .status[data-state='ok'] {
-        color: var(--ok, #3f6b4a);
-      }
-      .status[data-state='error'] {
-        color: var(--danger, #9c3b2e);
-      }
-    </style>
   </head>
   <body>
-    <main>
-      <header>
-        <p class="eyebrow">Brewing and tasting journal</p>
-        <h1>Coffee Notes</h1>
+    <div class="app">
+      <header class="app-header">
+        <div class="app-header__brand">
+          <p class="app-header__eyebrow">Brewing journal</p>
+          <h1 class="app-header__title">Coffee Notes</h1>
+        </div>
+        <div class="app-header__actions">
+          <button type="button" class="btn btn--ghost" id="settings-button">Settings</button>
+          <button type="button" class="btn btn--primary" id="new-note-button">New note</button>
+        </div>
       </header>
 
-      <section class="card">
-        <h2>Backend is live</h2>
-        <p>
-          The API, database and migrations are running. The journal UI — history sidebar, note
-          detail/editor, grinder settings — is built in the next task.
-        </p>
-        <p class="muted">
-          Try <a href="./api/health">GET /api/health</a> or <a href="./api/notes">GET /api/notes</a>.
-        </p>
-        <p class="status" data-health>Checking the API…</p>
-      </section>
-    </main>
+      <div class="banner" id="banner" role="alert" hidden></div>
+
+      <aside class="sidebar" aria-label="Note history">
+        <div class="sidebar__head">
+          <label class="sr-only" for="search-input">Search notes</label>
+          <input
+            type="search"
+            id="search-input"
+            class="input input--search"
+            placeholder="Search beans, grinders, notes"
+            autocomplete="off"
+          />
+          <p class="sidebar__count" id="history-count"></p>
+        </div>
+        <nav class="history" id="history" aria-label="Saved notes"></nav>
+      </aside>
+
+      <main class="pane" id="pane">
+        <div class="pane__content" id="pane-content" tabindex="-1"></div>
+      </main>
+    </div>
+
+    <div class="toast-region" id="toast-region" aria-live="polite"></div>
+    <div id="dialog-root"></div>
+
     <script type="module" src="./app.js"></script>
   </body>
 </html>
