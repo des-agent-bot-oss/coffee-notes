@@ -407,13 +407,23 @@ function settingsSnapshot() {
   };
 }
 
+/**
+ * Run one grinder mutation, then re-read the list so `snapshot()` — and the
+ * dialog that renders from it — never shows the state from before the change.
+ */
+async function mutateGrinder(request) {
+  const payload = await request();
+  await loadGrinders();
+  return payload.grinder;
+}
+
 async function showSettings() {
   settings = createSettings({
     snapshot: settingsSnapshot,
     actions: {
-      add: (name) => api.createGrinder(name).then((payload) => payload.grinder),
-      rename: (id, name) => api.renameGrinder(id, name).then((payload) => payload.grinder),
-      makeDefault: (id) => api.setDefaultGrinder(id).then((payload) => payload.grinder),
+      add: (name) => mutateGrinder(() => api.createGrinder(name)),
+      rename: (id, name) => mutateGrinder(() => api.renameGrinder(id, name)),
+      makeDefault: (id) => mutateGrinder(() => api.setDefaultGrinder(id)),
       remove: async (id) => {
         const payload = await api.deleteGrinder(id);
         await loadGrinders();
