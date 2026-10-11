@@ -1,0 +1,13 @@
+seeded 4 grinders, 5 notes
+shot 01-desktop-journal.png
+shot 02-note-editor.png
+walkthrough frames: 7
+shot 03-grinder-settings.png
+settings rows visible: ["1Zpresso JX-Pro","Baratza Encore","Comandante C40 MK4","Timemore C2"]
+shot 04-mobile-drawer.png
+shot 05-mobile-detail.png
+mobile overflow check: {"sw":390,"iw":390}
+{
+  "seededNotes": 5,
+  "pageErrors": []
+}

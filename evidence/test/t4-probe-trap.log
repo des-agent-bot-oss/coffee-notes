@@ -1,0 +1,8 @@
+settings focusables: ["Comandante C40Defaul","Rename Comandante C4","Remove Comandante C4","Fellow Ode Gen 20 no","Make default for Fel","Rename Fellow Ode Ge","Remove Fellow Ode Ge","settings-new-grinder","Add grinder","Load sample notes","Close"]
+focused last: {"tag":"BUTTON","id":"","cls":"btn btn--ghost","text":"Close","inDialog":true,"hasFocus":true}
+Tab from last: {"tag":"BODY","id":"","cls":"","text":"Skip to note content\n\n  ","inDialog":false,"hasFocus":false}
+Shift+Tab back: {"tag":"BUTTON","id":"","cls":"btn btn--ghost","text":"Close","inDialog":true,"hasFocus":true}
+focused first: {"tag":"BUTTON","id":"","cls":"btn btn--ghost btn--small","text":"Rename Comandante C40","inDialog":true,"hasFocus":true}
+Shift+Tab from first: {"tag":"BODY","id":"","cls":"","text":"Skip to note content\n\n  ","inDialog":false,"hasFocus":false}
+CDP activeElement: BODY
+hasFocus: false

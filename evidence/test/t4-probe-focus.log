@@ -1,0 +1,45 @@
+initial {"tag":"BODY","id":"","cls":"","inDialog":false,"dialogs":0}
+settings opened {"tag":"DIV","id":"","cls":"settings__body","inDialog":true,"dialogs":1}
+--- tab probe: settings dialog
+  tab1 {"tag":"BUTTON","id":"","cls":"btn btn--ghost btn--small","inDialog":true,"dialogs":1}
+  tab2 {"tag":"BUTTON","id":"","cls":"btn btn--danger btn--small","inDialog":true,"dialogs":1}
+  tab3 {"tag":"BUTTON","id":"","cls":"btn btn--ghost btn--small","inDialog":true,"dialogs":1}
+  tab4 {"tag":"BUTTON","id":"","cls":"btn btn--ghost btn--small","inDialog":true,"dialogs":1}
+  tab5 {"tag":"BUTTON","id":"","cls":"btn btn--danger btn--small","inDialog":true,"dialogs":1}
+  tab6 {"tag":"INPUT","id":"settings-new-grinder","cls":"input","inDialog":true,"dialogs":1}
+  tab7 {"tag":"BUTTON","id":"","cls":"btn btn--primary","inDialog":true,"dialogs":1}
+  tab8 {"tag":"BUTTON","id":"","cls":"btn btn--ghost btn--small","inDialog":true,"dialogs":1}
+  tab9 {"tag":"BUTTON","id":"","cls":"btn btn--ghost","inDialog":true,"dialogs":1}
+  tab10 {"tag":"BODY","id":"","cls":"","inDialog":false,"dialogs":1}
+after Esc dialogs= 0
+note rows= 1
+delete opened {"tag":"BUTTON","id":"","cls":"btn btn--ghost","inDialog":true,"dialogs":1}
+--- tab probe: delete dialog
+  tab1 {"tag":"BUTTON","id":"","cls":"btn btn--danger","inDialog":true,"dialogs":1}
+  tab2 {"tag":"BODY","id":"","cls":"","inDialog":false,"dialogs":1}
+  tab3 {"tag":"BUTTON","id":"","cls":"btn btn--ghost","inDialog":true,"dialogs":1}
+  tab4 {"tag":"BUTTON","id":"","cls":"btn btn--danger","inDialog":true,"dialogs":1}
+  tab5 {"tag":"BODY","id":"","cls":"","inDialog":false,"dialogs":1}
+  tab6 {"tag":"BUTTON","id":"","cls":"btn btn--ghost","inDialog":true,"dialogs":1}
+  tab7 {"tag":"BUTTON","id":"","cls":"btn btn--danger","inDialog":true,"dialogs":1}
+  tab8 {"tag":"BODY","id":"","cls":"","inDialog":false,"dialogs":1}
+  tab9 {"tag":"BUTTON","id":"","cls":"btn btn--ghost","inDialog":true,"dialogs":1}
+  tab10 {"tag":"BUTTON","id":"","cls":"btn btn--danger","inDialog":true,"dialogs":1}
+banner hidden= true
+banner text= ""
+pane html head= "<article class=\"card detail\"><header class=\"pane-header\"><div class=\"pane-header__titles\"><p class=\"pane-header__eyebrow\">Mon 12 Oct 2026 · 03:22</p><h2 class=\"pane-header__title\">Ethiopia Guji Hambela</h2></div><div class=\"pane-header__actions\"><button type=\"button\" class=\"btn btn--ghost btn--small\">Edit</button><button type=\"button\" class=\"btn btn--danger btn--small\">Delete</button></div></heade"
+after empty save: editor= 0 errs= 0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'Cancel' })
+
+    at /home/hermes/workspace/tools/ui-evidence/t4-probe-focus.mjs:56:52 {
+  log: [ "  - waiting for getByRole('button', { name: 'Cancel' })" ],
+  name: 'TimeoutError'
+}
+
+Node.js v26.7.0

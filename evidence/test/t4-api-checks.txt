@@ -1,0 +1,22 @@
+# T4 API-level checks  2026-10-11T19:19:17Z  base=http://127.0.0.1:4321  candidate=88f66601bb82828df7551941d59f1f12f814001f
+--- POST /api/notes {"brewed_at":"2026-02-30T10:00","grinder_name":"X"}
+{"error":{"code":"validation","message":"Check the highlighted fields.","fields":{"brewed_at":"That date and time does not exist."}}}
+HTTP 400
+--- POST /api/notes {"brewed_at":"2026-10-11T25:00","grinder_name":"X"}
+{"error":{"code":"validation","message":"Check the highlighted fields.","fields":{"brewed_at":"That date and time does not exist."}}}
+HTTP 400
+--- POST /api/notes {"brewed_at":"2026-10-11T10:00","grinder_name":"X","grind_size":-3}
+{"error":{"code":"validation","message":"Check the highlighted fields.","fields":{"grind_size":"Enter a number greater than 0 and at most 100."}}}
+HTTP 400
+--- POST /api/notes {"brewed_at":"2026-10-11T10:00","grinder_name":"X","dose_g":9999,"water_g":99999}
+{"error":{"code":"validation","message":"Check the highlighted fields.","fields":{"dose_g":"Enter a number greater than 0 and at most 200.","water_g":"Enter a number greater than 0 and at most 2000."}}}
+HTTP 400
+--- POST /api/notes {"brewed_at":"2026-10-11T10:00","grinder_id":999999}
+{"error":{"code":"validation","message":"Check the highlighted fields.","fields":{"grinder_id":"That grinder does not exist."}}}
+HTTP 400
+--- GET /api/notes/999999
+{"error":{"code":"not_found","message":"Note not found.","fields":{}}}
+HTTP 404
+--- GET /api/notes?limit=abc
+{"error":{"code":"validation","message":"Check the highlighted fields.","fields":{"limit":"Enter a whole number between 1 and 500."}}}
+HTTP 400
