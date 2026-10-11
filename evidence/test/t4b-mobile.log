@@ -1,0 +1,19 @@
+PASS  M390: no horizontal overflow  — scrollWidth=390, innerWidth=390
+PASS  M390: drawer button visible  — visible=true
+  M390 open: {"cls":"sidebar sidebar--drawer","backdrop":{"cls":"drawer-backdrop","hidden":false,"display":"block"},"bodyOverflow":"hidden","focusIn":true}
+PASS  M390: drawer opens with backdrop visible  — cls=sidebar sidebar--drawer backdrop={"cls":"drawer-backdrop","hidden":false,"display":"block"}
+PASS  M390: drawer controls usable (search filters)  — value="eth"
+  M390 closed: {"cls":"sidebar","overflow":"visible","focus":"notes-button"}
+PASS  M390: Esc closes the drawer and restores scroll  — cls=sidebar overflow=visible focus=notes-button
+PASS  M360: no horizontal overflow  — scrollWidth=360, innerWidth=360
+PASS  M360: drawer button visible  — visible=true
+  M360 open: {"cls":"sidebar sidebar--drawer","backdrop":{"cls":"drawer-backdrop","hidden":false,"display":"block"},"bodyOverflow":"hidden","focusIn":true}
+PASS  M360: drawer opens with backdrop visible  — cls=sidebar sidebar--drawer backdrop={"cls":"drawer-backdrop","hidden":false,"display":"block"}
+PASS  M360: drawer controls usable (search filters)  — value="eth"
+  M360 closed: {"cls":"sidebar","overflow":"visible","focus":"notes-button"}
+PASS  M360: Esc closes the drawer and restores scroll  — cls=sidebar overflow=visible focus=notes-button
+  cleanup context after Cancel/Discard: {"editor":0,"dialogs":0,"detail":1,"placeholder":0,"pane":"MON 5 OCT 2026 · 08:00 Cleanup Note Edit Delete BREW DATE AND TIME Mon 5 Oct 2026 · 08:00 "}
+PASS  cleanup: editor is closed after Cancel/Discard  — editor=0 dialogs=0
+PASS  cleanup: a selected note renders (NOT .placeholder) — sweep expected .placeholder  — detail=1 placeholder=0 pane="MON 5 OCT 2026 · 08:00 Cleanup Note Edit Delete BREW DATE AND TIME Mon 5 Oct 2026 · 08:00 "
+pageerrors: []
+SUMMARY mobile/cleanup: 0 failing assertion(s)

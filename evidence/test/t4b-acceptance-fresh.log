@@ -1,0 +1,48 @@
+PASS  state: loading skeleton (sidebar + pane)  — sidebar rows 6, pane skeleton 1
+PASS  state: empty history + welcome pane  — title="No notes yet", sampleButton=1, pane="Welcome to Coffee Notes"
+PASS  state: empty count label  — 0 NOTES
+PASS  keyboard: Ctrl+N does not fire while typing in an input  — editor=0, value="n", focus=search-input
+PASS  keyboard: Ctrl+N starts a new note from a non-typing target
+PASS  keyboard: no extra browser page opened by Ctrl+N  — pages=0
+PASS  samples: 5 demo notes seeded and marked with a Sample chip  — api demo=5, chips=5
+PASS  samples: detail labels sample data  — Sample Sample data — remove it from Settings when you are done with it.
+PASS  samples: user note created alongside demo notes  — status 201
+PASS  samples: demo removal keeps the user note and reports it  — demo=0, user=1, status="5 sample notes removed."
+PASS  grinders: blank name shows an inline error  — Enter a grinder name.
+PASS  grinders: duplicate name shows an inline error  — That name is already in use.
+PASS  grinders: first grinder became the default
+PASS  grinders: make default persisted (API default_id)  — default_id=4, comandante=4
+PASS  grinders: exactly one default badge
+PASS  keyboard: Ctrl+N ignored while a dialog is open
+PASS  note: new note preselects the default grinder  — value=id:4, option="Comandante C40 — default"
+PASS  note: brewed_at defaults to the browser local time (no UTC shift)  — field=2026-10-12T03:48, local now=2026-10-12T03:48
+PASS  note: save returns to detail with a success toast  — toast="Note saved."
+PASS  note: API stored grinder_id + snapshot name and verbatim brewed_at  — grinder_id=4, grinder_name=Comandante C40, brewed_at=2026-10-12T03:48
+PASS  note: API ratio_display 1:16.7  — ratio=1:16.7
+PASS  note: detail shows grinder, ratio and multi-line notes  — {"grinder":"Comandante C40","ratio":"1:16.7","dose":"18 g","water":"300 g"}
+PASS  note: history lists the note and the newest note is selected first  — rows=2
+PASS  validation: negative/absurd numerics show inline field errors  — {"grind_size":"Enter a number greater than 0 and at most 100.","dose_g":"Enter a number greater than 0 and at most 200.","water_g":"Enter a number greater than 0 and at most 2000."}
+PASS  validation: empty brew date is a field error  — Brew date and time is required.
+PASS  validation: 2026-02-30T10:00 cannot be saved from the UI  — control="rejected by the control (page.fill: Error: Malformed value)", fieldError=true, notes 2->2
+PASS  validation: no row created by failed saves  — before=2, after=2
+FAIL  validation: cleanup the editor  — threw: page.waitForSelector: Timeout 3000ms exceeded.
+PASS  note: cancelling a dirty new note asks first
+PASS  note: cancelled new note created no row  — before=2, after=2
+PASS  note: edit-cancel reverts the detail and the stored note  — ui="Ethiopia Guji Hambela", api="Ethiopia Guji Hambela"
+PASS  delete: confirmation names the note and the destructive label  — The note from Thu 1 Oct 2026 · 07:00 brewed with Hand grinder will be removed for good. This cannot be undone.
+PASS  delete: focus stays inside the confirmation dialog
+PASS  delete: Esc cancels without deleting  — count=2
+PASS  delete: confirmed delete removes the row and the API record  — count 2->1, rows=1, deleted id 6 -> 404
+PASS  search: filters the history
+PASS  state: filtered-empty is distinct from the no-notes empty state  — Nothing matches “zzz-no-such-note”. Try another word, or clear the search.
+PASS  search: Clear search restores the history
+PASS  api-error: useful banner + Retry, no stack trace, no stuck spinner  — banner="That note could not be opened. Internal boom Retry"
+PASS  api-error: Retry recovers after the API comes back  — rows=1
+PASS  api-error: offline message is human, with Retry  — Your notes could not be loaded. The Coffee Notes server is not answering. Check that it is still running, then retry. Retry
+PASS  api-error: offline Retry recovers
+PASS  layout: no horizontal overflow at 1440x900  — scrollWidth=1440, innerWidth=1440
+PASS  layout: notes drawer button hidden on desktop
+PASS  a11y: keyboard focus shows a visible 2px outline  — {"tag":"BUTTON","cls":"note-row","focusVisible":true,"width":"2px","style":"solid","color":"rgb(107, 74, 48)"}
+PASS  a11y: Tab stays inside the settings dialog
+
+45/46 checks passed

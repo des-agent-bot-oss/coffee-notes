@@ -1,0 +1,7 @@
+PASS  check4: a historical note references a live grinder  — note=Flow Note grinder_id=1 name=Flow Grinder
+PASS  check4: DELETE grinder returns 200  — status=200 body={"ok":true,"deleted_id":1,"new_default_id":null}
+PASS  check4: notes list still 200 after removal  — status=200
+PASS  check4: historical notes survive with their grinder name snapshot  — survivors=1/1 grinder_name="Flow Grinder"
+PASS  check4: no 5xx in any response  — 200/200
+PASS  check4: UI renders the orphaned note with grinder name, no banner  — detail="SUN 4 OCT 2026 · 08:00 Flow Note Edit Delete BREW DATE AND TIME Sun 4 Oct 2026 · 08:00 GRINDER Flow Grinder GRIND SIZE —" bannerHidden=true errs=[]
+PASS  check3-fresh: a storage-less browser context shows the server data  — rows=1 storage={"ls":0,"ss":0,"cookies":0}

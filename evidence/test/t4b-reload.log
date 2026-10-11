@@ -1,0 +1,4 @@
+PASS  refresh: note rows survive a same-tab reload  — before=1 after=1
+PASS  refresh: note detail (grinder name snapshot) still renders  — detail="SUN 4 OCT 2026 · 08:00 Flow Note Edit Delete BREW DATE AND TIME Sun 4 Oct 2026 · 08:00 GRINDER Flow Grinder GRIND SIZE — DOSE — WATER — RATIO — BEAN Flow Note ORIGIN — ROAST LEVEL — TASTING NOTES No t"
+PASS  refresh: grinder settings persist after reload  — {"rows":["Flow Grinder DEFAULT 1 note Rename Flow Grinder Remove Flow Grinder"],"defaultBadge":1}
+SUMMARY refresh: 0 failing assertion(s)
