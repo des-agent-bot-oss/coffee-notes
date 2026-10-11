@@ -1,0 +1,76 @@
+T7 coder — discarded-draft browser repro, before vs after the fix
+
+task        t_0270576b (T7 coder)
+candidate   f3f17fe610d172cacc12143d6306a5230eb9509c (fix), parent f6e4f1f (pre-fix source)
+env         Node 26.7.0, headless Chromium via Playwright 1.56 (/home/hermes/workspace/tools/ui-evidence)
+instances   before: 127.0.0.1:4351, pid 58328, fresh DB /home/hermes/.hermes/cache/scratch/t7/pre.db,
+                    source = `git archive f6e4f1f` into .../t7/pre
+            after:  127.0.0.1:4352, pid 58347, fresh DB /home/hermes/.hermes/cache/scratch/t7/post.db,
+                    source = /home/hermes/workspace/coffee-notes @ f3f17fe
+probe       node t7-discard-probe.mjs (T7_BASE/T7_LABEL/T7_OUT); exit 0 both runs
+flows       P1 = load a note -> Edit -> dirty -> Settings -> Discard changes
+            P2 = New note -> dirty -> Settings -> Discard changes
+            P3 = normal paths: dirty Cancel, clean Cancel, Esc guard, real save
+each binary fetched /api/health itself before the run; every assertion below is DOM state in
+#pane-content or a fresh GET /api/notes from the probe process.
+
+===== BEFORE (pre-fix source f6e4f1f, port 4351) =====
+[before] server identity: {"ok":true,"version":"0.1.0","db":"ok","now":"2026-10-11T20:08:34.639Z"}
+[before] setup notes: 
+[before] setup after save: 1:T7 baseline | pane: {"editorForms":0,"placeholders":0,"detailCards":1,"selectedRows":1,"paneText":"MON 12 OCT 2026 · 04:08 T7 baseline Edit Delete BREW DATE AN"}
+[before] P1 editor dirty, pane: {"editorForms":1,"placeholders":0,"detailCards":0,"selectedRows":1,"paneText":"EDITING NOTE T7 baseline Cancel Save Brew date and time Grin"}
+[before] P1 guard dialog: {"title":"Discard unsaved changes?","buttons":["Keep editing","Discard changes"]}
+[before] P1 after discard, pane (settings open): {"editorForms":1,"placeholders":0,"detailCards":0,"selectedRows":1,"paneText":"EDITING NOTE T7 baseline Cancel Save Brew date and time Grin"}
+[before] P1 settings dialog: {"title":"Grinder settings","buttons":["Add grinder","Load sample notes","Close"]}
+[before] P1 after settings closed, pane: {"editorForms":1,"placeholders":0,"detailCards":0,"selectedRows":1,"paneText":"EDITING NOTE T7 baseline Cancel Save Brew date and time Grin"}
+[before] P1 draft still readable: "STALE EDIT"
+[before] P1 stale save: clicked the abandoned form's Save
+[before] P1 api after stale save: 1:STALE EDIT
+[before] P1 api note bean_name: "STALE EDIT"
+[before] P2 editor dirty, pane: {"editorForms":1,"placeholders":0,"detailCards":0,"selectedRows":0,"paneText":"NEW NOTE Record a brew Cancel Save Brew date and time Grinde"}
+[before] P2 guard dialog: {"title":"Discard unsaved changes?","buttons":["Keep editing","Discard changes"]}
+[before] P2 after discard, pane (settings open): {"editorForms":1,"placeholders":0,"detailCards":0,"selectedRows":0,"paneText":"NEW NOTE Record a brew Cancel Save Brew date and time Grinde"}
+[before] P2 settings dialog: {"title":"Grinder settings","buttons":["Add grinder","Load sample notes","Close"]}
+[before] P2 after settings closed, pane: {"editorForms":1,"placeholders":0,"detailCards":0,"selectedRows":0,"paneText":"NEW NOTE Record a brew Cancel Save Brew date and time Grinde"}
+[before] P2 draft still readable: "GHOST DRAFT"
+[before] P2 stale save: clicked the abandoned form's Save
+[before] P2 api after stale save: rows 1 -> 2 :: 2:GHOST DRAFT | 1:STALE EDIT
+[before] P3a guard dialog: {"title":"Discard unsaved changes?","buttons":["Keep editing","Discard changes"]}
+[before] P3a pane: {"editorForms":0,"placeholders":0,"detailCards":1,"selectedRows":1,"paneText":"MON 12 OCT 2026 · 04:08 GHOST DRAFT Edit Delete BREW DATE AN"} tasting_notes: ""
+[before] P3b dialog after clean Cancel: null pane: {"editorForms":0,"placeholders":0,"detailCards":1,"selectedRows":1,"paneText":"MON 12 OCT 2026 · 04:08 GHOST DRAFT Edit Delete BREW DATE AN"}
+[before] P3c Esc dialog: {"title":"Discard unsaved changes?","buttons":["Keep editing","Discard changes"]}
+[before] P3c after Keep editing, pane: {"editorForms":1,"placeholders":0,"detailCards":0,"selectedRows":1,"paneText":"EDITING NOTE GHOST DRAFT Cancel Save Brew date and time Grin"} draft: "ESC DRAFT"
+[before] P3c guard dialog: {"title":"Discard unsaved changes?","buttons":["Keep editing","Discard changes"]}
+[before] P3c after discard, pane: {"editorForms":0,"placeholders":0,"detailCards":1,"selectedRows":1,"paneText":"MON 12 OCT 2026 · 04:08 GHOST DRAFT Edit Delete BREW DATE AN"}
+[before] P3d pane: {"editorForms":0,"placeholders":0,"detailCards":1,"selectedRows":1,"paneText":"MON 12 OCT 2026 · 04:08 T7 SAVED EDIT Edit Delete BREW DATE "} api bean_name: "STALE EDIT"
+
+===== AFTER (candidate f3f17fe, port 4352) =====
+[after] server identity: {"ok":true,"version":"0.1.0","db":"ok","now":"2026-10-11T20:08:47.752Z"}
+[after] setup notes: 
+[after] setup after save: 1:T7 baseline | pane: {"editorForms":0,"placeholders":0,"detailCards":1,"selectedRows":1,"paneText":"MON 12 OCT 2026 · 04:08 T7 baseline Edit Delete BREW DATE AN"}
+[after] P1 editor dirty, pane: {"editorForms":1,"placeholders":0,"detailCards":0,"selectedRows":1,"paneText":"EDITING NOTE T7 baseline Cancel Save Brew date and time Grin"}
+[after] P1 guard dialog: {"title":"Discard unsaved changes?","buttons":["Keep editing","Discard changes"]}
+[after] P1 after discard, pane (settings open): {"editorForms":0,"placeholders":1,"detailCards":0,"selectedRows":1,"paneText":"Nothing selected Choose a note from the history, or start a "}
+[after] P1 settings dialog: {"title":"Grinder settings","buttons":["Add grinder","Load sample notes","Close"]}
+[after] P1 after settings closed, pane: {"editorForms":0,"placeholders":1,"detailCards":0,"selectedRows":1,"paneText":"Nothing selected Choose a note from the history, or start a "}
+[after] P1 draft still readable: null
+[after] P1 stale save: no form in the pane -> nothing to click
+[after] P1 api after stale save: 1:T7 baseline
+[after] P1 api note bean_name: "T7 baseline"
+[after] P2 editor dirty, pane: {"editorForms":1,"placeholders":0,"detailCards":0,"selectedRows":0,"paneText":"NEW NOTE Record a brew Cancel Save Brew date and time Grinde"}
+[after] P2 guard dialog: {"title":"Discard unsaved changes?","buttons":["Keep editing","Discard changes"]}
+[after] P2 after discard, pane (settings open): {"editorForms":0,"placeholders":1,"detailCards":0,"selectedRows":0,"paneText":"Nothing selected Choose a note from the history, or start a "}
+[after] P2 settings dialog: {"title":"Grinder settings","buttons":["Add grinder","Load sample notes","Close"]}
+[after] P2 after settings closed, pane: {"editorForms":0,"placeholders":1,"detailCards":0,"selectedRows":0,"paneText":"Nothing selected Choose a note from the history, or start a "}
+[after] P2 draft still readable: null
+[after] P2 stale save: no form in the pane -> nothing to click
+[after] P2 api after stale save: rows 1 -> 1 :: 1:T7 baseline
+[after] P3a guard dialog: {"title":"Discard unsaved changes?","buttons":["Keep editing","Discard changes"]}
+[after] P3a pane: {"editorForms":0,"placeholders":0,"detailCards":1,"selectedRows":1,"paneText":"MON 12 OCT 2026 · 04:08 T7 baseline Edit Delete BREW DATE AN"} tasting_notes: ""
+[after] P3b dialog after clean Cancel: null pane: {"editorForms":0,"placeholders":0,"detailCards":1,"selectedRows":1,"paneText":"MON 12 OCT 2026 · 04:08 T7 baseline Edit Delete BREW DATE AN"}
+[after] P3c Esc dialog: {"title":"Discard unsaved changes?","buttons":["Keep editing","Discard changes"]}
+[after] P3c after Keep editing, pane: {"editorForms":1,"placeholders":0,"detailCards":0,"selectedRows":1,"paneText":"EDITING NOTE T7 baseline Cancel Save Brew date and time Grin"} draft: "ESC DRAFT"
+[after] P3c guard dialog: {"title":"Discard unsaved changes?","buttons":["Keep editing","Discard changes"]}
+[after] P3c after discard, pane: {"editorForms":0,"placeholders":0,"detailCards":1,"selectedRows":1,"paneText":"MON 12 OCT 2026 · 04:08 T7 baseline Edit Delete BREW DATE AN"}
+[after] P3d pane: {"editorForms":0,"placeholders":0,"detailCards":1,"selectedRows":1,"paneText":"MON 12 OCT 2026 · 04:08 T7 SAVED EDIT Edit Delete BREW DATE "} api bean_name: "T7 SAVED EDIT"
+
