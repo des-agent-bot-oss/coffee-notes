@@ -1,0 +1,17 @@
+RESULT PASS grinder-remove: API delete 200 and note survives with snapshot name :: del=200, note=200, name=Doomed Grinder, gid=null
+RESULT PASS grinder-remove: UI shows orphaned note with its grinder name, no 5xx/no crash :: bannerHidden=true, badResponses=[]
+RESULT PASS api-error: failed detail fetch shows banner + Retry, no stuck spinner, no stack trace :: banner="That note could not be opened. Internal boom | Retry", retry=1, skeleton=0
+RESULT PASS layout 390x844: no horizontal overflow (history + editor) :: history sw=390/iw=390, editor sw=390/iw=390
+RESULT PASS layout 390x844: visible controls >=44px tall (0 under) :: all controls >=44px
+RESULT PASS layout 390x844: drawer opens with backdrop and closes on Esc restoring focus :: open={"expanded":"true","backdropHidden":false,"bodyClass":true,"sidebarDrawer":true,"focusInPanel":true}, closed={"expanded":"false","backdropHidden":true,"focus":"notes-button"}
+RESULT PASS layout 360x844: no horizontal overflow (history + editor) :: history sw=360/iw=360, editor sw=360/iw=360
+RESULT PASS layout 360x844: visible controls >=44px tall (0 under) :: all controls >=44px
+RESULT PASS layout 360x844: drawer opens with backdrop and closes on Esc restoring focus :: open={"expanded":"true","backdropHidden":false,"bodyClass":true,"sidebarDrawer":true,"focusInPanel":true}, closed={"expanded":"false","backdropHidden":true,"focus":"notes-button"}
+file:///home/hermes/workspace/tools/ui-evidence/t4-flow2.mjs:139
+  up && notes.status === 200 && notes.body.notes.length === 3 && grinders.body.default_id === grinderId && seen && seen.length === 3,
+                                                                                              ^
+
+ReferenceError: grinderId is not defined
+    at file:///home/hermes/workspace/tools/ui-evidence/t4-flow2.mjs:139:95
+
+Node.js v26.7.0
