@@ -232,10 +232,12 @@ async function withGuard(action, message) {
 // --- navigation --------------------------------------------------------------
 
 function selectNote(id) {
-  if (id === state.selectedId && state.pane === 'detail') return;
   // Choosing a note is the drawer's purpose: close it before anything else so a
   // discard prompt can never open behind its focus trap.
   closeDrawer();
+  // Always re-read the note, even when it is the one on screen: a load that
+  // fails must raise the banner and Retry rather than quietly leaving the
+  // previous note in the pane as if it were current.
   withGuard(async () => {
     state.selectedId = id;
     state.previousSelection = null;
