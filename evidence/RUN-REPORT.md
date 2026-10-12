@@ -2,7 +2,7 @@
 
 Status: **COMPLETE — implemented, independently verified, and the review's should-fix applied and re-verified**
 Started 2026-10-12 02:00 UTC (10:00 Asia/Kuala_Lumpur). Last updated 2026-10-12 04:20 UTC by the coordinator.
-Owner: Desmond (Asia/Kuala_Lumpur). Executed by the VM software team (coordinator/coder/tester/reviewer).
+Owner: the project owner (Asia/Kuala_Lumpur). Executed by the VM software team (coordinator/coder/tester/reviewer).
 
 ## 1. Requirements and material assumptions
 Owner brief verbatim: `docs/BRIEF.md`. Binding technical contract: `docs/SPEC.md`. Material assumptions
@@ -170,7 +170,7 @@ truth). Verification tooling: `bash tools/ui-evidence/run-sweep.sh <port>`, `che
 ## 13. Telegram delivery receipts
 1. 2026-10-12 03:47 UTC — completion summary plus nine attachments (run report, delegation trace, Kanban
    export, four desktop/mobile screenshots, the mobile detail screenshot, the walkthrough video) sent to
-   the configured owner chat (DM, chat_id 8394361738) through the existing bot.
+   the configured owner chat (direct message; identifier redacted for publication).
 2. 2026-10-12 ~03:55 UTC — follow-up with the independent tester re-verification result.
 3. 2026-10-12 ~04:05 UTC — follow-up with the independent review verdict and the should-fix in flight.
 4. Final follow-up with the review closure, the post-fix verification and the refreshed attachments.
